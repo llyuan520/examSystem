@@ -123,7 +123,7 @@ class FileImportModal extends Component{
         const fields = props.fields ||  props.fileds || []
         return(
             <span style={props.style}>
-               <Button size='small' disabled={props.disabled} onClick={()=>this.toggleVisible(true)}>
+               <Button  disabled={props.disabled} onClick={()=>this.toggleVisible(true)}>
                    <Icon type="upload" />{props.title}
                </Button>
                 <Modal maskClosable={false} destroyOnClose={true} title={props.title} visible={visible} confirmLoading={loading} onOk={this.handleSubmit} onCancel={()=>this.toggleVisible(false)}>

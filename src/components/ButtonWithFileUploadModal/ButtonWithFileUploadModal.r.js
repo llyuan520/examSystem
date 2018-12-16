@@ -148,7 +148,7 @@ class ButtonWithFileUploadModal extends Component{
                     }}>
                         {
                             !readOnly && (
-                                <Button size='small'>
+                                <Button >
                                     <Icon type="upload" /> 上传
                                 </Button>
                             )

@@ -1,0 +1,80 @@
+/*
+ * @Author: liuliyuan 
+ * @Date: 2018-12-15 15:40:17 
+ * @Last Modified by: liuliyuan
+ * @Last Modified time: 2018-12-15 15:51:38
+ */
+ @import '~antd/lib/style/themes/default.less';
+
+ .tabsCard {
+   :global {
+     .ant-card-head {
+       padding: 0 16px;
+     }
+   }
+ }
+ 
+ 
+ // nav-card style
+ .nav-card{
+   flex: none;
+   padding: 12px 0;
+   .ant-card-meta-avatar {
+     padding-right: 0;
+     display: block;
+     float: none;
+     text-align: center;
+     margin-bottom: 10px;
+   }
+   .ant-card-meta-detail{
+     font-size: 13px;
+     vertical-align: middle;
+     color: rgba(0, 0, 0, 0.85);
+     //display: table-cell;
+     display: block;
+     text-align: center;
+     position: relative;
+ 
+     .ant-card-meta-description{
+       display: block;
+       color: rgba(0,0,0,.65);
+       transition: color .3s;
+       overflow: hidden;
+       text-overflow: ellipsis;
+       word-break: break-all;
+       white-space: nowrap;
+     }
+ 
+   }
+ }
+ .IconImg{
+   width: 60px;
+   height: 60px;
+   line-height: 60px;
+   border-radius: 50px;
+   vertical-align: middle;
+   align-items: center;
+   margin-right: 10px;
+   position: relative;
+   background: transparent;
+   >img{
+     width:60px;
+     position:absolute;
+     height:auto;
+     margin:auto;
+     left:0;
+     right:0;
+     top:0;
+     bottom:0;
+   }
+ }
+
+ .listMain{
+   .close{
+      position: absolute;
+      top: -10px;
+      z-index: 1;
+      right: 0;
+      font-size: 24px;
+   }
+ }

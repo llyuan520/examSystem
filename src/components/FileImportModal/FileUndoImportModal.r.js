@@ -145,7 +145,7 @@ class FileUndoImportModal extends Component{
         const { fields } = this.props
         return(
             <span style={props.style}>
-                <Button size='small' disabled={props.disabled} onClick={()=>this.toggleVisible(true)}>
+                <Button  disabled={props.disabled} onClick={()=>this.toggleVisible(true)}>
                     <Icon type="rollback" />
                     {props.title}
                 </Button>

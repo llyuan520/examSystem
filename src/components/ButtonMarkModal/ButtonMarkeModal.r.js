@@ -92,7 +92,7 @@ class ButtonMarkeModal extends Component{
         const {visible,loading} = this.state;
         return(
             <span style={props.style}>
-                <Button size='small' disabled={formOptions.disabled} onClick={()=>{
+                <Button  disabled={formOptions.disabled} onClick={()=>{
                     this.toggleVisible(true);
                     buttonOptions.onClick && buttonOptions.onClick()
                 }}>

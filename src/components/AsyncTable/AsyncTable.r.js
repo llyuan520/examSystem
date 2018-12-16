@@ -109,6 +109,7 @@ export default class AsyncTable extends Component{
                 /** 给外部一个回调方法，可以得到每次变更后的data*/
                 props.tableProps.onDataChange && props.tableProps.onDataChange([])
                 props.tableProps.onTotalSource && props.tableProps.onTotalSource({})
+                  
                 this.mounted && this.setState({
                     loaded: true,
                     dataSource:[],

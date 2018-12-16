@@ -161,8 +161,8 @@ class SearchTable extends Component{
                                             getFields(form,searchOption.fields)
                                         }
                                         <Col style={{width:'100%',textAlign:'right'}}>
-                                            <Button size='small' style={{margin:'4px 0 4px 10px'}} type="primary" htmlType="submit">查询</Button>
-                                            <Button size='small' style={{margin:'4px 0 4px 10px'}} onClick={()=>{
+                                            <Button style={{margin:'4px 0 4px 10px'}} type="primary" htmlType="submit">查询</Button>
+                                            <Button style={{margin:'4px 0 4px 10px'}} onClick={()=>{
                                                 form.resetFields()
                                                 this.setState({filters:{}})
                                                 searchOption.onResetFields && searchOption.onResetFields();
@@ -179,10 +179,10 @@ class SearchTable extends Component{
                     }
                     <Card
                         extra={tableOption.extra || null}
-                        style={{marginTop:6}}
+                        //style={{marginTop:6}}
                         bordered={false}
                         {...tableOption.cardProps}
-                        bodyStyle={{paddingBottom:( tableOption.pagination || tableOption.pageSize)?0:8}}
+                        bodyStyle={{ paddingRight:'16px',paddingLeft:'16px',paddingBottom:( tableOption.pagination || tableOption.pageSize)?8:0}}
                     >
                         <AsyncTable url={tableOption.url}
                                     updateKey={tableUpDateKey}

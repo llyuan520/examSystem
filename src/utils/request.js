@@ -31,16 +31,6 @@ request.testSuccess = (data,success,fail) => {
 };
 // http request 拦截器
 request.interceptors.request.use(function (config) {
-    console.log(config)
-    debugger
-    config.headers={
-        'Authorization': 'Bearer cGlnOnBpZw==',
-        // 'Accept': 'application/json',
-        // 'Content-Type': 'application/json; charset=utf-8',
-        // "Access-Control-Allow-Origin": "*"
-        //Authorization:request.getToken(),
-        //'X-Requested-With': 'XMLHttpRequest'
-    }
 
     // 在发送请求之前做些什么
     if(request.getToken()){
