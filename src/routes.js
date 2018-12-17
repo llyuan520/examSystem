@@ -36,14 +36,14 @@ const routes = [
         path:'/500',
         component:wrapPage('信易联金融服务平台 – 首页', Exception500),
         name:'500',
-    },{
-        path:'/web/*',
-        redirect:true,
-        to:'/web'
+    // },{
+    //     path:'/web/*',
+    //     redirect:true,
+    //     to:'/web'
     },{
         path:'*',
         redirect:true,
-        to:'/404'
+        to:'/web'
     }
 ]
 

@@ -4,5 +4,5 @@
  * description  :
  */
 
-import Home from './Home.react'
+import Home from './Home.r'
 export default Home

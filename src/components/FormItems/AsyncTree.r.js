@@ -1,14 +1,14 @@
 /*
  * @Author: liuchunxiu 
  * @Date: 2018-06-21 16:05:27 
- * @Last Modified by: liuchunxiu
- * @Last Modified time: 2018-06-22 16:17:10
+ * @Last Modified by: liuliyuan
+ * @Last Modified time: 2018-12-17 14:33:28
  */
 import React from 'react'
 import {Form,message} from 'antd'
 import PropTypes from 'prop-types'
 import {request} from 'utils'
-import Tree from './SearchTree'
+import Tree from './SearchTree.r'
 const FormItem = Form.Item;
 
 // 将后台数据转换为前端需要的数据

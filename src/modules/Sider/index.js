@@ -3,4 +3,4 @@
  * createTime   : 2018/12/14 17:54
  * description  :
  */
-export {default} from './Sider.react'
+export {default} from './Sider.r'
