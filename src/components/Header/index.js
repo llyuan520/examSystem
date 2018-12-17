@@ -3,5 +3,5 @@
  * createTime   : 2017/12/6 10:21
  * description  :
  */
-import Header from './Header.react'
+import Header from './Header.r'
 export default Header
