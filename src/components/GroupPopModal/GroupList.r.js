@@ -6,13 +6,44 @@
  */
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
-import { Card, Avatar, List, Icon } from 'antd'; //Spin, Alert
+import { Card, Avatar, List, Modal, Icon } from 'antd'; //Spin, Alert
 import './GroupList.less'
 
 const { Meta } = Card;
 
 class GroupList extends Component {
 
+    handleDelete=(values)=>{
+        const modalRef = Modal.confirm({
+            title: '友情提醒',
+            content: '该数据删除后将不可恢复，是否删除？',
+            okText: '确定',
+            okType: 'danger',
+            cancelText: '取消',
+            onOk:()=>{
+                modalRef && modalRef.destroy();
+                // request.delete(`${this.props.url}?${parseJsonToParams(values)}` )
+                //     .then(({data})=>{
+                //         this.toggleLoading(false)
+                //         if(data.code===200){
+                //             const {onSuccess} = this.props;
+                //             message.success('删除成功！');
+                //             this.toggleVisible(false);
+                //             onSuccess && onSuccess()
+                //         }else{
+                //             message.error(`删除失败:${data.msg}`)
+                //         }
+                //     }).catch(err=>{
+                //     message.error(err.message)
+                //     this.toggleLoading(false)
+                // })
+            },
+            onCancel() {
+                modalRef.destroy()
+            },
+        });
+    }
+    
     composeNav=(routes)=>{
         return routes.map(item=>{
             if(item && !item.to && item.icon){
@@ -30,7 +61,7 @@ class GroupList extends Component {
     }
 
     render() {
-        const { dataSource } = this.props;
+        const { isShow, dataSource } = this.props;
         //Card loading={currentUserLoading}
         const data = [
             {
@@ -62,8 +93,8 @@ class GroupList extends Component {
                             <List.Item>
                                 <List.Item.Meta
                                 //avatar={<Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />}
-                                title={<a href="https://ant.design">{item.title}</a>}
-                                description="Ant Design, a design language for background applications, is refined by Ant UED Team"
+                                title={<a href="https://ant.design">所在组：{item.title}</a>}
+                                description={`责任说明：Ant Design, a design language for background applications, is refined by Ant UED Team`}
                                 />
                             </List.Item>
                             )}
@@ -93,7 +124,10 @@ class GroupList extends Component {
                                     //     this.handlerClick(item)
                                     // }} 
                                 >
-                                    <Icon type="close-circle" theme="filled" className="close" />
+                                    {
+                                        isShow && <Icon type="close-circle" className="close" onClick={()=>this.handleDelete(item.id)} /> 
+                                    }
+                                    
                                     <Link to={'###'}>
                                         <Card className="nav-card">
                                             <Meta

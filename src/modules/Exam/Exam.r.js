@@ -4,11 +4,12 @@ import { SearchTable } from 'components'
 import { request, parseJsonToParams } from 'utils'
 import PopModal from './PopModal'
 import GroupPopModal from 'components/GroupPopModal'
-const pointerStyle = {
-    cursor: 'pointer',
-    color : '#1890ff',
-    margin: '0px 5px'
-}
+import SignUpPopModal from 'components/SignUpPopModal'
+// const pointerStyle = {
+//     cursor: 'pointer',
+//     color : '#1890ff',
+//     margin: '0px 5px'
+// }
 
 const formItemStyle={
     labelCol:{
@@ -59,7 +60,7 @@ const columns = (context) => [
     {
         title:'考试名称',
         dataIndex:'mainName',
-        render:(text,record)=>(<span title='查看详情' style={pointerStyle} onClick={()=>context.showModal('view',record)}>{text}</span>),
+        //render:(text,record)=>(<span title='查看详情' style={pointerStyle} onClick={()=>context.showModal('view',record)}>{text}</span>),
     },
     {
         title:'考试类型',
@@ -99,11 +100,11 @@ const columns = (context) => [
         key: 'actions',
         dataIndex:'actions',
         fixed: 'right',
-        width: 200,
+        width: 250,
         render: (text, record) => (
             <React.Fragment>
                 <span 
-                    style={{ color:'#f5222d', cursor:'pointer'}}
+                    style={{ color:'#1890ff', cursor:'pointer'}}
                     onClick={()=>{
                         context.setState({
                             modalConfig:{
@@ -125,15 +126,29 @@ const columns = (context) => [
                     删除
                 </span>
                 <Divider type="vertical" />
-                <span 
-                    style={{ color:'#f5222d', cursor:'pointer'}}
-                    //onClick={context.handleDelete(record.id)}
-                >
-                    报名
-                </span>
+                <SignUpPopModal
+                    title="报名"
+                    record={record}
+                />
                 <Divider type="vertical" />
-                {/* 分组 */}
                 <GroupPopModal
+                    title="分组"
+                    type='add'
+                    modalOptions={{
+                        top:0,
+                        width:'80%',
+                        bodyStyle:{
+                            height   : "calc(100% - 55px)",
+                            minHeight: "100vh"
+                            //overflowY:'auto',
+                        }
+                    }}
+                />
+                <Divider type="vertical" />
+                <GroupPopModal
+                    title="详情"
+                    type='view'
+                    record={record}
                     modalOptions={{
                         top:0,
                         width:'80%',
@@ -180,7 +195,7 @@ class Exam extends Component {
     handleDelete=(values)=>{
         const modalRef = Modal.confirm({
             title: '友情提醒',
-            content: '该删除后将不可恢复，是否删除？',
+            content: '该数据删除后将不可恢复，是否删除？',
             okText: '确定',
             okType: 'danger',
             cancelText: '取消',

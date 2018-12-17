@@ -4,7 +4,6 @@
 import React,{Component} from 'react';
 import {Button,Modal,Form,Row,Col,Spin,message} from 'antd';
 import {request,getFields} from 'utils'
-import moment from 'moment'
 const apiList = [
     {text:'待处理',value:'10'},
     {text:'处理中',value:'20'},
@@ -26,7 +25,13 @@ class PopModal extends Component{
     }
     state={
         initData:null,
-        loaded:false
+        loaded:false,
+        task:[
+            { label: '20', value: 20 },
+            { label: '21', value: 21 },
+            { label: '22', value: 22 },
+            { label: '23', value: 23 },
+        ]
     }
 
     toggleLoaded = loaded => this.setState({loaded})
@@ -86,31 +91,14 @@ class PopModal extends Component{
         this.props.form.validateFields((err, values) => {
             if (!err) {
                 const type = this.props.modalConfig.type;
-                this.toggleLoaded(false)
-
-                for(let key in values){
-                    if(Array.isArray( values[key] ) && values[key].length === 2 && moment.isMoment(values[key][0])){
-                        //当元素为数组&&长度为2&&是moment对象,那么可以断定其是一个rangePicker
-                        values[`${key}Start`] = values[key][0].format('YYYY-MM-DD');
-                        values[`${key}End`] = values[key][1].format('YYYY-MM-DD');
-                        values[key] = undefined;
-                    }
-                    if(moment.isMoment(values[key])){
-                        //格式化一下时间 YYYY-MM类型
-                        if(moment(values[key].format('YYYY-MM'),'YYYY-MM',true).isValid()){
-                            values[key] = values[key].format('YYYY-MM');
-                        }
-
-                        /*if(moment(values[key].format('YYYY-MM-DD'),'YYYY-MM-DD',true).isValid()){
-                         values[key] = values[key].format('YYYY-MM-DD');
-                         }*/
-                    }
-                }
+                this.toggleLoading(false)
+                console.log(values)
+                this.toggleVisible(false);
                 if(type==='edit'){
                     values.id=this.state.initData['id'];
-                    this.updateRecord(values)
+                    //this.updateRecord(values)
                 }else if(type==='add'){
-                    this.createRecord(values)
+                    //this.createRecord(values)
                 }
             }
         });
@@ -158,7 +146,7 @@ class PopModal extends Component{
 
     render(){
         const props = this.props;
-        const {initData,loaded} = this.state;
+        const {initData,loaded,task} = this.state;
         let title='';
         let disabled = false;
         const type = props.modalConfig.type;
@@ -203,7 +191,7 @@ class PopModal extends Component{
                             {
                                 getFields(props.form,[
                                     {
-                                        label:'考试名称',
+                                        label:'考试科目名称',
                                         fieldName:'commodityName',
                                         type:'input',
                                         span:24,
@@ -222,13 +210,24 @@ class PopModal extends Component{
                                         },
                                     },
                                     {
-                                        label:'考试类型',
+                                        label:'考试信息',
                                         fieldName:'purchaseTaxNum',
                                         type:'select',
                                         span:24,
                                         formItemStyle,
+                                        options:apiList,
                                         componentProps:{
-                                            disabled
+                                            disabled,
+                                            onChange:e=>{
+                                                this.setState({
+                                                    task:[
+                                                        { label: '30', value: 30 },
+                                                        { label: '31', value: 31 },
+                                                        { label: '32', value: 32 },
+                                                        { label: '33', value: 33 },
+                                                    ]
+                                                })
+                                            }
                                         },
                                         fieldDecoratorOptions:{
                                             initialValue:initData && initData['purchaseTaxNum'] ,
@@ -239,46 +238,24 @@ class PopModal extends Component{
                                                 }
                                             ]
                                         },
-                                        options:apiList
                                     },
                                     {
-                                        label:'报名时间',
-                                        fieldName:'deliveryDate',
-                                        type:'rangePicker',
-                                        span:24,
+                                        label: '监考日期',
+                                        fieldName: 'task',
+                                        type: 'checkboxGroup',
+                                        span: 24,
                                         formItemStyle,
-                                        componentProps:{
-                                            disabled
-                                        },
-                                        fieldDecoratorOptions:{
-                                            initialValue:(initData && [moment(initData['invoiceCodeStart'], 'YYYY-MM-DD'), moment(initData['invoiceCodeEnd'], 'YYYY-MM-DD')]) || undefined,
-                                            rules:[
+                                        options: task,
+                                        fieldDecoratorOptions: {
+                                            initialValue: initData && initData['task'] ,
+                                            rules: [
                                                 {
-                                                    required:true,
-                                                    message:'请选择报名时间'
+                                                    required: true,
+                                                    message: '请选择监考日期'
                                                 }
                                             ]
-                                        },
-                                    },
-                                    {
-                                        label:'考试时间',
-                                        fieldName:'documentNum',
-                                        type:'rangePicker',
-                                        span:24,
-                                        formItemStyle,
-                                        componentProps:{
-                                            disabled
-                                        },
-                                        fieldDecoratorOptions:{
-                                            initialValue:(initData && [moment(initData['invoiceCodeStart'], 'YYYY-MM-DD'), moment(initData['invoiceCodeEnd'], 'YYYY-MM-DD')]) || undefined,
-                                            rules:[
-                                                {
-                                                    required:true,
-                                                    message:'请选择考试时间'
-                                                }
-                                            ]
-                                        },
-                                    },
+                                        }
+                                    }
                                 ])
                             }
                         </Row>

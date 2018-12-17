@@ -10,6 +10,7 @@ import request from './request'
 import composeMenus from './composeMenus'
 import regRules from './regRules'
 import getFields from './getFields'
+import moment from "moment";
 
 const wrapPage = (title,Component) => props => <DocumentTitle title={`${title}`}>{<Component {...props}/>}</DocumentTitle>
 
@@ -96,6 +97,28 @@ const isEmpty = val=> {
     return val === null || val === undefined || val.trim() === ''
 }
 
+const formatMoment = values => {
+    for (let key in values) {
+      if (
+        Array.isArray(values[key]) &&
+        values[key].length === 2 &&
+        moment.isMoment(values[key][0])
+      ) {
+        //当元素为数组&&长度为2&&是moment对象,那么可以断定其是一个rangePicker
+        values[`${key}Start`] = values[key][0].format("YYYY-MM-DD");
+        values[`${key}End`]   = values[key][1].format("YYYY-MM-DD");
+        values[key]           = undefined;
+      }
+      if (moment.isMoment(values[key])) {
+        //格式化一下时间 YYYY-MM类型
+        if (moment(values[key].format("YYYY-MM"), "YYYY-MM", true).isValid()) {
+          values[key] = values[key].format("YYYY-MM");
+        }
+      }
+    }
+    return values;
+  };
+
 export {
     wrapPage,
     regRules,
@@ -110,4 +133,5 @@ export {
     setFormat,
     parseJsonToParams,
     isEmpty,
+    formatMoment,
 }

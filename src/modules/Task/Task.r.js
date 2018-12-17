@@ -1,13 +1,13 @@
 import React, { Component } from 'react'
-import { Modal, Button, message } from 'antd'
+import { Modal, Button, message, Divider } from 'antd'
 import { SearchTable } from 'components'
 import { request, parseJsonToParams } from 'utils'
 import PopModal from './PopModal'
-const pointerStyle = {
-    cursor: 'pointer',
-    color : '#1890ff',
-    margin: '0px 5px'
-}
+// const pointerStyle = {
+//     cursor: 'pointer',
+//     color : '#1890ff',
+//     margin: '0px 5px'
+// }
 
 const formItemStyle={
     labelCol:{
@@ -58,7 +58,7 @@ const columns = (context) => [
     {
         title:'考试名称',
         dataIndex:'mainName',
-        render:(text,record)=>(<span title='查看详情' style={pointerStyle} onClick={()=>context.showModal('view',record)}>{text}</span>),
+        //render:(text,record)=>(<span title='查看详情' style={pointerStyle} onClick={()=>context.showModal('view',record)}>{text}</span>),
     },
     {
         title:'所在分组',
@@ -85,7 +85,7 @@ const columns = (context) => [
         title: '操作',
         key: 'actions',
         dataIndex:'actions',
-        width: 50,
+        width: 100,
         render: (text, record) => (
             <React.Fragment>
                 <span 
@@ -102,6 +102,13 @@ const columns = (context) => [
                     }}
                 >
                     分组
+                </span>
+                <Divider type="vertical" />
+                <span 
+                    style={{ color:'#1890ff', cursor:'pointer'}}
+                    onClick={()=>context.showModal('view',record)}
+                >
+                    详情
                 </span>
             </React.Fragment>
             
@@ -139,7 +146,7 @@ class Task extends Component {
     handleDelete=(values)=>{
         const modalRef = Modal.confirm({
             title: '友情提醒',
-            content: '该删除后将不可恢复，是否删除？',
+            content: '该数据删除后将不可恢复，是否删除？',
             okText: '确定',
             okType: 'danger',
             cancelText: '取消',

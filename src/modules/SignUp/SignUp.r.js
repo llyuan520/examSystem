@@ -1,13 +1,13 @@
 import React, { Component } from 'react'
-import { Modal, Button, message, Divider } from 'antd'
+import { Modal, message, Divider } from 'antd'
 import { SearchTable } from 'components'
 import { request, parseJsonToParams } from 'utils'
-import PopModal from './PopModal'
-const pointerStyle = {
-    cursor: 'pointer',
-    color : '#1890ff',
-    margin: '0px 5px'
-}
+import SignUpPopModal from 'components/SignUpPopModal'
+// const pointerStyle = {
+//     cursor: 'pointer',
+//     color : '#1890ff',
+//     margin: '0px 5px'
+// }
 
 const formItemStyle={
     labelCol:{
@@ -58,7 +58,7 @@ const columns = (context) => [
     {
         title:'考试名称',
         dataIndex:'mainName',
-        render:(text,record)=>(<span title='查看详情' style={pointerStyle} onClick={()=>context.showModal('view',record)}>{text}</span>),
+        //render:(text,record)=>(<span title='查看详情' style={pointerStyle} onClick={()=>context.showModal('view',record)}>{text}</span>),
     },
     {
         title:'所在分组',
@@ -83,21 +83,26 @@ const columns = (context) => [
         title: '操作',
         key: 'actions',
         dataIndex:'actions',
-        width: 100,
+        width: 150,
         render: (text, record) => (
             <React.Fragment>
-                <span 
-                    style={{ color:'#f5222d', cursor:'pointer'}}
-                    //onClick={context.handleDelete(record.id)}
-                >
-                    报名
-                </span>
+                <SignUpPopModal
+                    title="报名"
+                    record={record}
+                />
                 <Divider type="vertical" />
                 <span 
                     style={{ color:'#f5222d', cursor:'pointer'}}
-                    onClick={()=>context.handleDelete(record.id)}
+                    onClick={()=>context.handleCancel(record.id)}
                 >
                     撤销
+                </span>
+                <Divider type="vertical" />
+                <span 
+                    style={{ color:'#1890ff', cursor:'pointer'}}
+                    onClick={()=>context.showModal('view',record)}
+                >
+                    详情
                 </span>
             </React.Fragment>
             
@@ -108,34 +113,19 @@ const columns = (context) => [
 
 class SignUp extends Component {
     state={
-        visible:false,
-        modalConfig:{
-            type:''
-        },
         tableKey:Date.now(),
     }
+    
     refreshTable = ()=>{
         this.setState({
             tableKey:Date.now()
         })
     }
-    toggleModalVisible=visible=>{
-        this.setState({
-            visible
-        })
-    }
-    showModal=type=>{
-        this.toggleModalVisible(true)
-        this.setState({
-            modalConfig:{
-                type:type
-            }
-        })
-    }
-    handleDelete=(values)=>{
+    
+    handleCancel=(values)=>{
         const modalRef = Modal.confirm({
             title: '友情提醒',
-            content: '该删除后将不可恢复，是否删除？',
+            content: '该数据撤销后将不可恢复，是否数据？',
             okText: '确定',
             okType: 'danger',
             cancelText: '取消',
@@ -146,11 +136,11 @@ class SignUp extends Component {
                         this.toggleLoading(false)
                         if(data.code===200){
                             const {onSuccess} = this.props;
-                            message.success('删除成功！');
+                            message.success('数据成功！');
                             this.toggleVisible(false);
                             onSuccess && onSuccess()
                         }else{
-                            message.error(`删除失败:${data.msg}`)
+                            message.error(`数据失败:${data.msg}`)
                         }
                     }).catch(err=>{
                     message.error(err.message)
@@ -163,7 +153,7 @@ class SignUp extends Component {
         });
     }
     render() {
-        const {visible,modalConfig,tableKey} = this.state;
+        const { tableKey } = this.state;
         const dataSource = [{
             id: '1',
             mainName: '胡彦斌',
@@ -199,15 +189,8 @@ class SignUp extends Component {
                     // scroll:{
                     //     x:'150%'
                     // },
-                    extra:(
-                        <React.Fragment>
-                            <Button type="primary" onClick={()=>this.showModal('add')} >新增</Button>
-                        </React.Fragment>
-                    ),
                 }}
-            >
-                <PopModal refreshTable={this.refreshTable} visible={visible} modalConfig={modalConfig} toggleModalVisible={this.toggleModalVisible} />
-            </SearchTable>
+            />
         )
     }
 }

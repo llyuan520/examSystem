@@ -19,6 +19,8 @@ const formItemStyle = {
         span:14
     }
 }
+const dateFormat = 'YYYY-MM-DD';
+const dateTimeFormat = "YYYY-MM-DD HH:mm";
 class PopModal extends Component{
     static defaultProps={
         type:'edit',
@@ -89,11 +91,21 @@ class PopModal extends Component{
                 this.toggleLoaded(false)
 
                 for(let key in values){
-                    if(Array.isArray( values[key] ) && values[key].length === 2 && moment.isMoment(values[key][0])){
-                        //当元素为数组&&长度为2&&是moment对象,那么可以断定其是一个rangePicker
-                        values[`${key}Start`] = values[key][0].format('YYYY-MM-DD');
-                        values[`${key}End`] = values[key][1].format('YYYY-MM-DD');
-                        values[key] = undefined;
+                    if(key === 'deliveryDate'){
+                        if(Array.isArray( values[key] ) && values[key].length === 2 && moment.isMoment(values[key][0])){
+                            //当元素为数组&&长度为2&&是moment对象,那么可以断定其是一个rangePicker
+                            values[`${key}Start`] = values[key][0].format(dateTimeFormat);
+                            values[`${key}End`] = values[key][1].format(dateTimeFormat);
+                            delete values[key]
+                        }
+                    }
+                    if(key === 'documentNum'){
+                        if(Array.isArray( values[key] ) && values[key].length === 2 && moment.isMoment(values[key][0])){
+                            //当元素为数组&&长度为2&&是moment对象,那么可以断定其是一个rangePicker
+                            values[`${key}Start`] = values[key][0].format(dateFormat);
+                            values[`${key}End`] = values[key][1].format(dateFormat);
+                            delete values[key] 
+                        }
                     }
                     if(moment.isMoment(values[key])){
                         //格式化一下时间 YYYY-MM类型
@@ -106,11 +118,13 @@ class PopModal extends Component{
                          }*/
                     }
                 }
+                console.log(values)
+                
                 if(type==='edit'){
                     values.id=this.state.initData['id'];
-                    this.updateRecord(values)
+                    //this.updateRecord(values)
                 }else if(type==='add'){
-                    this.createRecord(values)
+                    //this.createRecord(values)
                 }
             }
         });
@@ -248,10 +262,14 @@ class PopModal extends Component{
                                         span:24,
                                         formItemStyle,
                                         componentProps:{
-                                            disabled
+                                            disabled,
+                                            showTime:{ 
+                                                format: 'HH:mm' 
+                                            },
+                                            format:dateTimeFormat
                                         },
                                         fieldDecoratorOptions:{
-                                            initialValue:(initData && [moment(initData['invoiceCodeStart'], 'YYYY-MM-DD'), moment(initData['invoiceCodeEnd'], 'YYYY-MM-DD')]) || undefined,
+                                            initialValue:(initData && [moment(initData['invoiceCodeStart'], dateTimeFormat), moment(initData['invoiceCodeEnd'], dateTimeFormat)]) || undefined,
                                             rules:[
                                                 {
                                                     required:true,
@@ -270,7 +288,7 @@ class PopModal extends Component{
                                             disabled
                                         },
                                         fieldDecoratorOptions:{
-                                            initialValue:(initData && [moment(initData['invoiceCodeStart'], 'YYYY-MM-DD'), moment(initData['invoiceCodeEnd'], 'YYYY-MM-DD')]) || undefined,
+                                            initialValue:(initData && [moment(initData['invoiceCodeStart'], dateFormat), moment(initData['invoiceCodeEnd'], dateFormat)]) || undefined,
                                             rules:[
                                                 {
                                                     required:true,

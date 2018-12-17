@@ -1,12 +1,14 @@
 /**
  * Created by liuliyuan on 2018/12/16.
  */
-import React,{Component} from 'react'
-import {Drawer,Row,Col,Card} from 'antd';
+import React, { Component } from 'react'
+import { Drawer, Row, Col, Card, List, } from 'antd';
 //import PropTypes from 'prop-types'
 //import {request,getFields} from 'utils'
 import GroupList  from './GroupList.r'
 import TreeList from './TreeList.r'
+import ExamInfor from 'components/ExamInfor'
+import { getUrlParam } from 'utils'
 
 const dataSource = [
     {
@@ -303,7 +305,13 @@ const treeData = [{
         { name: '0-0-1-1', id: '0-0-1-7',isLeaf : true, },
         { name: '0-0-1-2', id: '0-0-1-8',isLeaf : true, },
     ],
-  }];
+}];
+
+const data = [
+    {
+        title: 'Ant Design Title 1',
+    },
+];
 class GroupPopModal extends Component{
 
     state={
@@ -317,27 +325,29 @@ class GroupPopModal extends Component{
     }
 
     render(){
-        const {style,onClick,drawerOptions,treeCardOption} =this.props;
-        const {visible} = this.state;
+        const { type, record, style, title, drawerOptions, treeCardOption } =this.props;
+        const { visible } = this.state;
         const bodyStyle = {
             padding: '12px',
             overflowY:'auto',
             height:window.screen.availHeight-210
         }
+        const isShow = type && type!=='view'
+        const authority = getUrlParam('authority')
         return(
             <span style={style}>
                 <span 
-                    style={{ color:'#f5222d', cursor:'pointer'}}
+                    style={{ color:'#1890ff', cursor:'pointer'}}
                     onClick={()=>{
                         this.toggleVisible(true);
-                        onClick && onClick()
+                        //onClick && onClick()
                     }}
                 >
-                    分组
+                    {title}
                 </span>
 
                 <Drawer
-                    title     = '分组'
+                    title     = {title}
                     placement = "top"
                     //closable={true}
                     visible = {visible}
@@ -353,23 +363,59 @@ class GroupPopModal extends Component{
                     }}
                     {...drawerOptions}
                 >
-                    <Row gutter={24}>
-                        <Col lg={7} md={24}>
-                            <Card
-                                extra = {treeCardOption && (treeCardOption.extra || null)}
-                                //style={{marginTop:10}}
-                                //{...treeCardOption.cardProps}
-                                bodyStyle={bodyStyle}
-                            >
-                                <TreeList treeData={treeData} />
-                            </Card>
-                        </Col>
-                        <Col lg={17} md={24}>
-                            <GroupList 
-                                dataSource={dataSource}
-                             />
-                        </Col>
-                    </Row>
+                    {
+                        record && (
+                            <React.Fragment>
+                                {/* 考试信息 */}
+                                <ExamInfor record={record} />
+
+                                { 
+                                    parseInt(authority, 0) === 1 && (
+                                        <List
+                                            itemLayout="horizontal"
+                                            dataSource={data}
+                                            renderItem={item => (
+                                            <List.Item>
+                                                <List.Item.Meta
+                                                //avatar={<Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />}
+                                                title={<a href="https://ant.design">所在组：{item.title}</a>}
+                                                description={`责任说明：Ant Design, a design language for background applications, is refined by Ant UED Team`}
+                                                />
+                                            </List.Item>
+                                            )}
+                                        />
+                                    )
+                                }
+
+                                {/* <DescriptionList size="small" style={{ marginBottom: 24 }}  layout='horizontal' col={1}>
+                                    <Description term="所在组">Ant Design Title 1</Description>
+                                    <Description term="责任说明">{record.purchaseTaxNum}</Description>
+                                </DescriptionList> */}
+                            </React.Fragment>
+                        )
+                    }
+                    {
+                        parseInt(authority, 0) !== 1 && (
+                            <Row gutter={24}>
+                                <Col lg={7} md={24}>
+                                    <Card
+                                        extra = {treeCardOption && (treeCardOption.extra || null)}
+                                        //style={{marginTop:10}}
+                                        //{...treeCardOption.cardProps}
+                                        bodyStyle={bodyStyle}
+                                    >
+                                        <TreeList isShow={isShow} treeData={treeData} />
+                                    </Card>
+                                </Col>
+                                <Col lg={17} md={24}>
+                                    <GroupList 
+                                        isShow={isShow}
+                                        dataSource={dataSource}
+                                    />
+                                </Col>
+                            </Row>
+                        )
+                    }
                 </Drawer>
             </span>
         )

@@ -4,7 +4,7 @@
 import React,{Component} from 'react'
 import {getUrlParam} from 'utils'
 import {connect} from 'react-redux'
-import {login} from '../../redux/ducks/user'
+import {login} from 'redux/ducks/user'
 import { compose } from 'redux';
 class LoginWithURL extends Component{
     state = {
