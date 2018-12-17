@@ -39,7 +39,7 @@ class LoginWithURL extends Component{
 
     componentWillMount(){
         const username=getUrlParam('username'),
-            loginToken=getUrlParam('token');
+            loginToken=getUrlParam('loginToken');
 
         if(username && loginToken){
             this.loginWithSSO(username,loginToken)

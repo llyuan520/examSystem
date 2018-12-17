@@ -9,7 +9,6 @@
     "blueimp-md5": "^2.10.0",
     "cross-env": "^5.2.0",
     "immutable": "^4.0.0-rc.9",
-    "js-base64": "^2.4.9",
     "lodash": "^4.17.11",
     "moment": "^2.23.0",
     "react": "^16.6.3",
@@ -46,5 +45,6 @@
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ]
+  ],
+  "proxy": "http://fqlee4cloud:9999/"
 }

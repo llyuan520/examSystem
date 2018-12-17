@@ -11,6 +11,9 @@ import {wrapPage} from 'utils';
 
 import Web from 'modules/Web.r';
 import Login from 'modules/Login';
+import Exception403 from 'modules/Exception/403';
+import Exception404 from 'modules/Exception/404';
+import Exception500 from 'modules/Exception/500';
 
 const routes = [
     {
@@ -19,12 +22,28 @@ const routes = [
         name:'主页',
     },{
         path: '/ssoLogin',
-        component: props =>wrapPage('信易联金融服务平台 – 首页', <Login {...props} />),
+        component:props => <Login {...props} />, //wrapPage('信易联金融服务平台 – 首页', props => <Login {...props} />)
         name: 'url登录'
+    },{
+        path:'/403',
+        component:wrapPage('信易联金融服务平台 – 首页', Exception403),
+        name:'403',
+    },{
+        path:'/404',
+        component:wrapPage('信易联金融服务平台 – 首页', Exception404),
+        name:'404',
+    },{
+        path:'/500',
+        component:wrapPage('信易联金融服务平台 – 首页', Exception500),
+        name:'500',
+    },{
+        path:'/web/*',
+        redirect:true,
+        to:'/web'
     },{
         path:'*',
         redirect:true,
-        to:'/web'
+        to:'/404'
     }
 ]
 
