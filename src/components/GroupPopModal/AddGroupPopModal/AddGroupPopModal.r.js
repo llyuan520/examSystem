@@ -140,7 +140,7 @@ class AddGroupPopModal extends Component{
                                                 <Col span={19}>
                                                     <AddPeoplePopModal 
                                                         buttonOptions={{
-                                                            text:'添加人员',
+                                                            text:'选择人员',
                                                         }}
                                                         modalOptions={{
                                                             width:'800px',
