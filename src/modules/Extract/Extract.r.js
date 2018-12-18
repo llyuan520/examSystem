@@ -199,6 +199,9 @@ class Extract extends Component {
                     // scroll:{
                     //     x:'150%'
                     // },
+                    cardProps:{
+                        title:'我的任务管理',
+                    },
                     extra:(
                         <React.Fragment>
                             <Button type="primary" onClick={()=>this.showModal('add')} >新增考试科目</Button>

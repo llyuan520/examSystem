@@ -97,13 +97,6 @@ const columns = (context) => [
                 >
                     撤销
                 </span>
-                <Divider type="vertical" />
-                <span 
-                    style={{ color:'#1890ff', cursor:'pointer'}}
-                    onClick={()=>context.showModal('view',record)}
-                >
-                    详情
-                </span>
             </React.Fragment>
             
         )
@@ -186,6 +179,9 @@ class SignUp extends Component {
                     columns:columns(this),
                     dataSource,
                     url:'/output/invoice/marry/unwanted/list',
+                    cardProps:{
+                        title:'监控报名',
+                    },
                     // scroll:{
                     //     x:'150%'
                     // },

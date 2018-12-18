@@ -3,6 +3,7 @@ import { Tree, Spin, message, Button, Divider, Modal } from 'antd';
 import PropTypes from 'prop-types'
 import { request } from 'utils'
 import AddGroupPopModal from 'components/GroupPopModal/AddGroupPopModal'
+import AddPeoplePopModal from 'components/GroupPopModal/AddPeoplePopModal'
 
 const TreeNode = Tree.TreeNode;
 class TreeList extends Component {
@@ -104,7 +105,17 @@ class TreeList extends Component {
                                 isShow && (
                                     <React.Fragment>
                                         <Divider type="vertical" />
-                                        <Button size="small">添加人员</Button>
+                                        <AddPeoplePopModal 
+                                            buttonOptions={{
+                                                text:'添加人员',
+                                            }}
+                                            modalOptions={{
+                                                width:'800px',
+                                                bodyStyle:{
+                                                    //height: 450, //window.screen.availHeight-300
+                                                }
+                                            }}
+                                        />
                                         <Divider type="vertical" />
                                         <Button size="small">截至</Button>
                                         <Divider type="vertical" />

@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
-import { Modal, Button, message, Divider } from 'antd'
+import { Modal, message, Divider } from 'antd'
 import { SearchTable } from 'components'
 import { request, parseJsonToParams } from 'utils'
-import PopModal from './PopModal'
+import GroupPopModal from 'components/GroupPopModal'
 // const pointerStyle = {
 //     cursor: 'pointer',
 //     color : '#1890ff',
@@ -88,28 +88,34 @@ const columns = (context) => [
         width: 100,
         render: (text, record) => (
             <React.Fragment>
-                <span 
-                    style={{ color:'#f5222d', cursor:'pointer'}}
-                    onClick={()=>{
-                        context.setState({
-                            modalConfig:{
-                                type:'modify',
-                                record,
-                            },
-                        },()=>{
-                            context.toggleModalVisible(true)
-                        })
+                <GroupPopModal
+                    title="分组"
+                    type='add'
+                    modalOptions={{
+                        top:0,
+                        width:'80%',
+                        bodyStyle:{
+                            height   : "calc(100% - 55px)",
+                            minHeight: "100vh"
+                            //overflowY:'auto',
+                        }
                     }}
-                >
-                    分组
-                </span>
+                />
                 <Divider type="vertical" />
-                <span 
-                    style={{ color:'#1890ff', cursor:'pointer'}}
-                    onClick={()=>context.showModal('view',record)}
-                >
-                    详情
-                </span>
+                <GroupPopModal
+                    title="详情"
+                    type='view'
+                    record={record}
+                    modalOptions={{
+                        top:0,
+                        width:'80%',
+                        bodyStyle:{
+                            height   : "calc(100% - 55px)",
+                            minHeight: "100vh"
+                            //overflowY:'auto',
+                        }
+                    }}
+                />
             </React.Fragment>
             
         )
@@ -119,28 +125,11 @@ const columns = (context) => [
 
 class Task extends Component {
     state={
-        visible:false,
-        modalConfig:{
-            type:''
-        },
         tableKey:Date.now(),
     }
     refreshTable = ()=>{
         this.setState({
             tableKey:Date.now()
-        })
-    }
-    toggleModalVisible=visible=>{
-        this.setState({
-            visible
-        })
-    }
-    showModal=type=>{
-        this.toggleModalVisible(true)
-        this.setState({
-            modalConfig:{
-                type:type
-            }
         })
     }
     handleDelete=(values)=>{
@@ -174,7 +163,7 @@ class Task extends Component {
         });
     }
     render() {
-        const {visible,modalConfig,tableKey} = this.state;
+        const { tableKey } = this.state;
         const dataSource = [{
             id: '1',
             mainName: '胡彦斌',
@@ -207,18 +196,14 @@ class Task extends Component {
                     columns:columns(this),
                     dataSource,
                     url:'/output/invoice/marry/unwanted/list',
+                    cardProps:{
+                        title:'监考人员抽取',
+                    },
                     // scroll:{
                     //     x:'150%'
                     // },
-                    extra:(
-                        <React.Fragment>
-                            <Button type="primary" onClick={()=>this.showModal('add')} >新增</Button>
-                        </React.Fragment>
-                    ),
                 }}
-            >
-                <PopModal refreshTable={this.refreshTable} visible={visible} modalConfig={modalConfig} toggleModalVisible={this.toggleModalVisible} />
-            </SearchTable>
+            />
         )
     }
 }

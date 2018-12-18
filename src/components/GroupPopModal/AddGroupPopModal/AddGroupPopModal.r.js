@@ -4,6 +4,7 @@
 import React,{Component} from 'react'
 import { Modal,Row,Col,Button,Icon,Form } from 'antd';
 import {getFields,formatMoment,regRules} from 'utils'
+import AddPeoplePopModal from 'components/GroupPopModal/AddPeoplePopModal'
 
 const formItemStyle = {
     labelCol:{
@@ -53,7 +54,7 @@ class AddGroupPopModal extends Component{
                     disabled={buttonOptions.disabled}
                     onClick={(e) => {
                         this.toggleVisible(true);
-                        //buttonOptions.onClick && buttonOptions.onClick();
+                        buttonOptions.onClick && buttonOptions.onClick();
                     }}
                 >
                     {buttonOptions.icon && <Icon type={buttonOptions.icon} />}
@@ -137,7 +138,17 @@ class AddGroupPopModal extends Component{
                                                     
                                                 </Col>
                                                 <Col span={19}>
-                                                    <Button>添加人员</Button>
+                                                    <AddPeoplePopModal 
+                                                        buttonOptions={{
+                                                            text:'添加人员',
+                                                        }}
+                                                        modalOptions={{
+                                                            width:'800px',
+                                                            bodyStyle:{
+                                                                //height: 450, //window.screen.availHeight-300
+                                                            }
+                                                        }}
+                                                    />
                                                 </Col>
                                             </Row>
                                         </FormItem>

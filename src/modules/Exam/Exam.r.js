@@ -259,9 +259,12 @@ class Exam extends Component {
                     scroll:{
                         x:'150%'
                     },
+                    cardProps:{
+                        title:'考试信息管理',
+                    },
                     extra:(
                         <React.Fragment>
-                            <Button type="primary" onClick={()=>this.showModal('add')} >新增</Button>
+                            <Button type="primary" onClick={()=>this.showModal('add')} >新增考试</Button>
                         </React.Fragment>
                     ),
                 }}
