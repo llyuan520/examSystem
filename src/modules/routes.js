@@ -8,7 +8,7 @@ import Home from './Home';
 import Exam from './Exam';
 import Task from './Task';
 import SignUp from './SignUp';
-import Extract from './Extract';
+import TestProject from './TestProject';
 
 const PATH = '/web';
 const routes = [
@@ -37,9 +37,9 @@ const routes = [
         icon:'team',
         exact:true,
     },{
-        path:`${PATH}/extract`,
-        component:wrapPage('监考人员抽取', Extract),
-        name:'监考人员抽取',
+        path:`${PATH}/testProject`,
+        component:wrapPage('考试项目管理', TestProject),
+        name:'考试项目管理',
         icon:'radar-chart',
         exact:true,
     },{

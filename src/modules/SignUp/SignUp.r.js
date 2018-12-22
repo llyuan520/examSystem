@@ -180,7 +180,7 @@ class SignUp extends Component {
                     dataSource,
                     url:'/output/invoice/marry/unwanted/list',
                     cardProps:{
-                        title:'监控报名',
+                        title:'监考报名',
                     },
                     // scroll:{
                     //     x:'150%'

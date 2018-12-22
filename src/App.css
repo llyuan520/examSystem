@@ -118,7 +118,7 @@ table.data-grid{
   margin-bottom: 0;
 }
 .ant-form-item-label, .ant-form-item-control{
-  height: 48px;
+  height: 53px;
 }
 
 /* 表格收索中距离缩小 */
@@ -127,7 +127,7 @@ table.data-grid{
 } */
 
 .fix-ie10-formItem-fileUpload .ant-form-item-label, .fix-ie10-formItem-fileUpload .ant-form-item-control {
-  min-height: 48px;
+  min-height: 53px;
   margin-top: 0;
   margin-bottom: 12px;
 }

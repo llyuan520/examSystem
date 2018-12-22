@@ -197,7 +197,7 @@ class Task extends Component {
                     dataSource,
                     url:'/output/invoice/marry/unwanted/list',
                     cardProps:{
-                        title:'监考人员抽取',
+                        title:'我任务管理',
                     },
                     // scroll:{
                     //     x:'150%'

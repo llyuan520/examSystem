@@ -4,6 +4,7 @@
 import React,{Component} from 'react'
 import { Modal,Row,Col,Button,Icon,Form } from 'antd';
 import {getFields,formatMoment,regRules} from 'utils'
+//import moment from 'moment'
 import AddPeoplePopModal from 'components/GroupPopModal/AddPeoplePopModal'
 
 const formItemStyle = {
@@ -22,6 +23,7 @@ class AddGroupPopModal extends Component{
         visible:false,
         loading:false,
         pullingWay:undefined,
+        pullingType:undefined,
     }
     
     toggleLoading = loading => this.setState({loading})
@@ -44,7 +46,7 @@ class AddGroupPopModal extends Component{
     }
 
     render(){
-        const {visible,loading,pullingWay} = this.state;
+        const {visible,loading,pullingWay,pullingType} = this.state;
         const {style,form,buttonOptions,modalOptions} =this.props;
         
         return(
@@ -95,6 +97,61 @@ class AddGroupPopModal extends Component{
                                                 ]
                                             },
                                         },
+                                        {
+                                            label:'组名类型',
+                                            fieldName:'pullingType',
+                                            type:'radioGroup',
+                                            span:24,
+                                            formItemStyle,
+                                            options:[
+                                                {
+                                                    label: '管理组',
+                                                    value: '1',
+                                                },
+                                                {
+                                                    label: '监考组',
+                                                    value: '2',
+                                                },
+                                            ],
+                                            componentProps:{
+                                                onChange:e=>{
+                                                    e && e.preventDefault();
+                                                    this.setState({
+                                                        pullingType:e.target.value
+                                                    })
+                                                }
+                                            },
+                                            fieldDecoratorOptions:{
+                                                //initialValue:(initData && initData.pullingType) || undefined,
+                                            }
+                                        },
+                                    ])
+                                }
+                                {
+                                   (pullingType && pullingType !== '1') &&  getFields(form,[
+                                        {
+                                            label:'考试时间',
+                                            fieldName:'documentNum',
+                                            type:'rangePicker',
+                                            span:24,
+                                            formItemStyle,
+                                            // componentProps:{
+                                            //     disabled
+                                            // },
+                                            fieldDecoratorOptions:{
+                                                //initialValue:(initData && [moment(initData['invoiceCodeStart'], dateFormat), moment(initData['invoiceCodeEnd'], dateFormat)]) || undefined,
+                                                rules:[
+                                                    {
+                                                        required:true,
+                                                        message:'请选择考试时间'
+                                                    }
+                                                ]
+                                            },
+                                        },
+                                    ])
+                                }
+                                {
+                                    getFields(form,[
                                         {
                                             label:'拉人方式',
                                             fieldName:'pullingWay',

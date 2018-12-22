@@ -56,13 +56,18 @@ const searchFields = [
 ]
 const columns = (context) => [
     {
-        title:'考试名称',
+        title:'项目名称',
         dataIndex:'mainName',
         //render:(text,record)=>(<span title='查看详情' style={pointerStyle} onClick={()=>context.showModal('view',record)}>{text}</span>),
     },
     {
-        title:'所在分组',
+        title:'所属考试信息',
         dataIndex:'purchaseTaxNum',
+        width: 200,
+    },
+    {
+        title:'监考人数',
+        dataIndex:'commodityName',
         width: 200,
     },
     {
@@ -90,14 +95,14 @@ const columns = (context) => [
                     style={{ color:'#f5222d', cursor:'pointer'}}
                     //onClick={()=>context.handleCancel(record.id)}
                 >
-                    监考分配
+                    人员抽取
                 </span>
                 <Divider type="vertical" />
                 <span 
                     style={{ color:'#1890ff', cursor:'pointer'}}
                     onClick={()=>context.showModal('view',record)}
                 >
-                    详情
+                    考场安排
                 </span>
             </React.Fragment>
             
@@ -106,7 +111,7 @@ const columns = (context) => [
 ];
 
 
-class Extract extends Component {
+class TestProject extends Component {
     state={
         visible:false,
         modalConfig:{
@@ -200,11 +205,11 @@ class Extract extends Component {
                     //     x:'150%'
                     // },
                     cardProps:{
-                        title:'我的任务管理',
+                        title:'考试项目管理',
                     },
                     extra:(
                         <React.Fragment>
-                            <Button type="primary" onClick={()=>this.showModal('add')} >新增考试科目</Button>
+                            <Button type="primary" onClick={()=>this.showModal('add')} >新增考试项目</Button>
                         </React.Fragment>
                     ),
                 }}
@@ -215,4 +220,4 @@ class Extract extends Component {
     }
 }
 
-export default Extract
+export default TestProject

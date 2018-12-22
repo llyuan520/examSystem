@@ -26,6 +26,14 @@ export default class FileUpload extends Component{
         const props = {
             ...this.props,
             onRemove: () => {
+                /*this.setState(({ fileList }) => {
+                    const index = fileList.indexOf(file);
+                    const newFileList = fileList.slice();
+                    newFileList.splice(index, 1);
+                    return {
+                        fileList: newFileList,
+                    };
+                });*/
                 setFieldsValue(undefined)
             },
             beforeUpload: file => {
@@ -43,7 +51,7 @@ export default class FileUpload extends Component{
         };
         return(
             <Upload {...props} {...props.componentProps} >
-                <Button size="small" disabled={fileList && fileList.length>=1}>
+                <Button disabled={fileList && fileList.length>=1}>
                     <Icon type="upload" />{props.componentProps.buttonText}
                 </Button>
                 {

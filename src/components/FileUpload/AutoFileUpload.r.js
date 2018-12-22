@@ -1,12 +1,22 @@
 import React,{Component} from 'react';
+import PropTypes from 'prop-types'
 import {message,Upload,Button,Icon} from 'antd';
 import {connect} from 'react-redux'
 
 
 class AutoFileUpload extends Component{
+    static propTypes={
+        name:PropTypes.string,
+        btnSize:PropTypes.string,
+    }
+    static defaultProps={
+        title:'导入',
+    }
+
     state={
         loading:false
     }
+
     onChange=info=>{
         if (info.file.status === 'uploading') {
             this.setState({loading:true})
@@ -14,7 +24,7 @@ class AutoFileUpload extends Component{
         if (info.file.status === 'done') {
             if(info.file.response.code===200){
                 message.success(`${info.file.name} 上传成功`);
-                this.props.fetchTable_1_Data()
+                this.props.onSuccess()
             }else {
                 message.error(info.file.response.msg);
             }
@@ -30,20 +40,20 @@ class AutoFileUpload extends Component{
         name: 'files',
         action:`${window.baseURL+this.props.url}`,
         headers: {
-            Authorization:props.token,
+            Authorization:this.props.token,
         },
         showUploadList:false
     });
     render(){
         let {loading} = this.state;
+        const props = this.props;
+        console.log(props)
         return(
-            <div style={{display:'inline-block',marginRight:5}}>
-                    <Upload {...this.getUpLoadProps(this.props)} onChange={this.onChange.bind(this)}>
-                            <Button size="small" style={{marginTop:10}} loading={loading}>
-                                <Icon type="upload" /> 导入
-                            </Button>
-                    </Upload>
-            </div>
+            <Upload {...this.getUpLoadProps(props)} onChange={this.onChange.bind(this)}>
+                    <Button disabled={props.disabled} loading={loading}>
+                        <Icon type="upload" /> { props.title }
+                    </Button>
+            </Upload>
         )
     }
 }
