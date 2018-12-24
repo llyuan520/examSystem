@@ -26,48 +26,41 @@ const apiList = [
 const searchFields = [
     {
         label: '考试名称',
-        fieldName: 'commodityName',
+        fieldName: 'examName',
         formItemStyle,
         span:8,
         type: 'input',
     },
     {
-        label: '考试类型',
-        fieldName: 'purchaseTaxNum',
+        label: '所在分组',
+        fieldName: 'groupName',
         formItemStyle,
         span:8,
         type: 'input',
     },
     {
         label: '状态',
-        fieldName: 'subletBusiness',
+        fieldName: 'state',
         formItemStyle,
         span: 8,
         type: 'select',
         options: apiList
     },
-    {
-        label:'时间起止',
-        fieldName:'deliveryDate',
-        type:'rangePicker',
-        span:8,
-        formItemStyle,
-    }
 ]
 const columns = (context) => [
     {
         title:'考试名称',
-        dataIndex:'mainName',
+        dataIndex:'examName',
         //render:(text,record)=>(<span title='查看详情' style={pointerStyle} onClick={()=>context.showModal('view',record)}>{text}</span>),
     },
     {
         title:'所在分组',
-        dataIndex:'purchaseTaxNum',
+        dataIndex:'groupName',
         width: 200,
     },
     {
         title:'状态',
-        dataIndex:'invoiceType',
+        dataIndex:'state',
         width: 200,
         render(text, record){
             apiList.map(o=>{
@@ -109,30 +102,6 @@ class SignUp extends Component {
         tableKey:Date.now(),
     }
     
-    componentDidMount() {
-        //this.fetchExamapplylist()
-    }
-
-    fetchExamapplylist = () => {
-        request.get(`/examapply/page`)
-            .then(({data}) => {
-                console.log(data)
-                // if(data.code===0){
-                //     let resData = data.data
-                //     console.log(resData)
-                //     this.setState({
-                //         permissions:resData.permissions, //用户权限信息
-                //         roles:resData.roles, //用户角色信息
-                //         sysUser:resData.sysUser, //用户信息
-                //     })
-                // }
-            })
-            .catch(err => {
-                console.log(err)
-                message.error(err.message)
-            })
-    }
-
     refreshTable = ()=>{
         this.setState({
             tableKey:Date.now()
@@ -171,27 +140,6 @@ class SignUp extends Component {
     }
     render() {
         const { tableKey } = this.state;
-        const dataSource = [{
-            id: '1',
-            mainName: '胡彦斌',
-            commodityName: 32,
-            invoiceNum:10,
-            address: '西湖区湖底公园1号',
-            invoiceType:20,
-            invoiceCodeStart:'2018-12-16',
-            invoiceCodeEnd:'2018-12-16',
-            purchaseTaxNum:'10',
-          }, {
-            id: '2',
-            mainName: '胡彦斌',
-            commodityName: 22,
-            invoiceNum:11,
-            address: '西湖区湖底公园2号',
-            invoiceType:30,
-            invoiceCodeStart:'2018-12-16',
-            invoiceCodeEnd:'2018-12-16',
-            purchaseTaxNum:'20',
-          }];
         return (
             <SearchTable
                 searchOption={{
@@ -199,9 +147,9 @@ class SignUp extends Component {
                 }}
                 tableOption={{
                     key:tableKey,
+                    rowKey:'groupId',
                     pageSize:100,
                     columns:columns(this),
-                    dataSource,
                     url:'/examapply/page',
                     cardProps:{
                         title:'监考报名',

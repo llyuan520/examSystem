@@ -2,7 +2,7 @@
  * Created by liurunbin on 2017/12/21.
  */
 import React,{Component} from 'react';
-import {Table,message} from 'antd'
+import {Table} from 'antd' //message
 import PropTypes from 'prop-types'
 import {request} from 'utils'
 import './styles.module.less'
@@ -68,14 +68,13 @@ export default class AsyncTable extends Component{
         request.get(props.url,{
             params:composeParams
         }).then(({data}) => {
-
-            if(data.code===200){
+            //if(data.code===200){
                 const pagination = { ...this.state.pagination };
-                pagination.total = typeof data.data.total !== 'undefined' ? data.data.total : data.data.page.total;
-                pagination.pageSize = typeof data.data.size !== 'undefined' ? data.data.size : data.data.page.size;
-
-                let dataSource = data.data.records ? data.data.records : data.data.page.records;
-                let totalSource = {...data.data, page:undefined};
+                pagination.total = typeof data.total !== 'undefined' ? data.total : data.page.total;
+                pagination.pageSize = typeof data.size !== 'undefined' ? data.size : data.page.size;
+                
+                let dataSource = data.records ? data.records : data.page.records;
+                let totalSource = {...data, page:undefined};
 
                 /** 给外部一个回调方法，可以得到每次变更后的data*/
                 props.tableProps.onDataChange && props.tableProps.onDataChange(dataSource)
@@ -91,7 +90,7 @@ export default class AsyncTable extends Component{
                     //dataSource:[...dataSource,{id:'sss'}],
                     dataSource,
                     totalSource,
-                    footerDate: data.data,
+                    footerDate: data,
                     selectedRowKeys:[],
                     //summaryData:summaryData,
                     pagination
@@ -104,17 +103,17 @@ export default class AsyncTable extends Component{
 
                 /**假如设置了单选或多选，重新异步请求数据的时候选中项也要清空，也要主动触发一下selectedRowKeys的onChange*/
                 props.tableProps.clearSelectedRowAfterFetch && props.tableProps.onRowSelect && props.tableProps.onRowSelect([],[])
-            }else{
-                message.error(data.msg)
-                /** 给外部一个回调方法，可以得到每次变更后的data*/
-                props.tableProps.onDataChange && props.tableProps.onDataChange([])
-                props.tableProps.onTotalSource && props.tableProps.onTotalSource({})
+            // }else{
+            //     message.error(data.msg)
+            //     /** 给外部一个回调方法，可以得到每次变更后的data*/
+            //     props.tableProps.onDataChange && props.tableProps.onDataChange([])
+            //     props.tableProps.onTotalSource && props.tableProps.onTotalSource({})
                   
-                this.mounted && this.setState({
-                    loaded: true,
-                    dataSource:[],
-                });
-            }
+            //     this.mounted && this.setState({
+            //         loaded: true,
+            //         dataSource:[],
+            //     });
+            // }
 
         }).catch(err=>{
             this.mounted && this.setState({
