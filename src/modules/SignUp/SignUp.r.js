@@ -148,7 +148,6 @@ class SignUp extends Component {
                 tableOption={{
                     key:tableKey,
                     rowKey:'groupId',
-                    pageSize:100,
                     columns:columns(this),
                     url:'/examapply/page',
                     cardProps:{

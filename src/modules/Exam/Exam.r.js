@@ -224,27 +224,6 @@ class Exam extends Component {
     }
     render() {
         const {visible,modalConfig,tableKey} = this.state;
-        const dataSource = [{
-            id: '1',
-            mainName: '胡彦斌',
-            commodityName: 32,
-            invoiceNum:10,
-            address: '西湖区湖底公园1号',
-            invoiceType:20,
-            invoiceCodeStart:'2018-12-16',
-            invoiceCodeEnd:'2018-12-16',
-            purchaseTaxNum:'10',
-          }, {
-            id: '2',
-            mainName: '胡彦斌',
-            commodityName: 22,
-            invoiceNum:11,
-            address: '西湖区湖底公园2号',
-            invoiceType:30,
-            invoiceCodeStart:'2018-12-16',
-            invoiceCodeEnd:'2018-12-16',
-            purchaseTaxNum:'20',
-          }];
         return (
             <SearchTable
                 searchOption={{
@@ -252,10 +231,9 @@ class Exam extends Component {
                 }}
                 tableOption={{
                     key:tableKey,
-                    pageSize:100,
+                    pageSize:10,
                     columns:columns(this),
-                    dataSource,
-                    url:'/output/invoice/marry/unwanted/list',
+                    url:'/examinfo/page',
                     scroll:{
                         x:'150%'
                     },

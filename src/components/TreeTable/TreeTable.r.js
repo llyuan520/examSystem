@@ -231,7 +231,7 @@ class TreeTable extends Component {
                         typeof tableOption.pagination === "undefined"
                           ? true
                                                                           :     tableOption.pagination,
-                                                              pageSize    : tableOption.pageSize || 100,
+                                                              pageSize    : tableOption.pageSize || 10,
                                                               size        : "small",
                                                               onRow       : tableOption.onRow || undefined,
                                                               rowSelection: 

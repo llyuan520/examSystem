@@ -234,7 +234,6 @@ class TestProject extends Component {
                 }}
                 tableOption={{
                     key:tableKey,
-                    pageSize:100,
                     columns:columns(this),
                     dataSource,
                     url:'/output/invoice/marry/unwanted/list',
