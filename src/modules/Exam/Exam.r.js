@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Modal, Button, message, Divider } from 'antd'
 import { SearchTable } from 'components'
-import { request, parseJsonToParams } from 'utils'
+import { request } from 'utils'
 import PopModal from './PopModal'
 import GroupPopModal from 'components/GroupPopModal'
 import SignUpPopModal from 'components/SignUpPopModal'
