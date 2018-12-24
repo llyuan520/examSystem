@@ -18,23 +18,23 @@ import Exception500 from 'modules/Exception/500';
 const routes = [
     {
         path:'/web',
-        component:wrapPage('信易联金融服务平台 – 首页', Web),
+        component:wrapPage('考务系统平台 – 首页', Web),
         name:'主页',
     },{
         path: '/ssoLogin',
-        component:props => <Login {...props} />, //wrapPage('信易联金融服务平台 – 首页', props => <Login {...props} />)
+        component:props => <Login {...props} />, //wrapPage('考务系统平台平台 – 首页', props => <Login {...props} />)
         name: 'url登录'
     },{
         path:'/403',
-        component:wrapPage('信易联金融服务平台 – 首页', Exception403),
+        component:wrapPage('403', Exception403),
         name:'403',
     },{
         path:'/404',
-        component:wrapPage('信易联金融服务平台 – 首页', Exception404),
+        component:wrapPage('404', Exception404),
         name:'404',
     },{
         path:'/500',
-        component:wrapPage('信易联金融服务平台 – 首页', Exception500),
+        component:wrapPage('500', Exception500),
         name:'500',
     // },{
     //     path:'/web/*',

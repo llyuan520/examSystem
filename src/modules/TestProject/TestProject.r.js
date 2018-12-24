@@ -3,6 +3,8 @@ import { Modal, Button, message, Divider, } from 'antd'
 import { SearchTable } from 'components'
 import { request, parseJsonToParams } from 'utils'
 import PopModal from './PopModal'
+import PersonExtractPopModal from './PersonExtractPopModal' //人员抽取
+import ExamRoomPopModal from './ExamRoomPopModal' //考场安排
 // const pointerStyle = {
 //     cursor: 'pointer',
 //     color : '#1890ff',
@@ -93,14 +95,14 @@ const columns = (context) => [
             <React.Fragment>
                 <span 
                     style={{ color:'#f5222d', cursor:'pointer'}}
-                    //onClick={()=>context.handleCancel(record.id)}
+                    onClick={()=>context.showPersonExtractModal('view',record)}
                 >
                     人员抽取
                 </span>
                 <Divider type="vertical" />
                 <span 
                     style={{ color:'#1890ff', cursor:'pointer'}}
-                    onClick={()=>context.showModal('view',record)}
+                    onClick={()=>context.showExamRoomModal('view',record)}
                 >
                     考场安排
                 </span>
@@ -114,7 +116,15 @@ const columns = (context) => [
 class TestProject extends Component {
     state={
         visible:false,
+        PersonExtractVisible:false,
+        ExamRoomVisible:false,
         modalConfig:{
+            type:''
+        },
+        PersonExtractModalConfig:{
+            type:''
+        },
+        ExamRoomModalConfig:{
             type:''
         },
         tableKey:Date.now(),
@@ -129,6 +139,16 @@ class TestProject extends Component {
             visible
         })
     }
+    togglePersonExtractModalVisible=PersonExtractVisible=>{
+        this.setState({
+            PersonExtractVisible
+        })
+    }
+    toggleExamRoomModalVisible=ExamRoomVisible=>{
+        this.setState({
+            ExamRoomVisible
+        })
+    }
     showModal=type=>{
         this.toggleModalVisible(true)
         this.setState({
@@ -137,6 +157,23 @@ class TestProject extends Component {
             }
         })
     }
+    showPersonExtractModal=type=>{
+        this.togglePersonExtractModalVisible(true)
+        this.setState({
+            PersonExtractModalConfig:{
+                type:type
+            }
+        })
+    }
+    showExamRoomModal=type=>{
+        this.toggleExamRoomModalVisible(true)
+        this.setState({
+            ExamRoomModalConfig:{
+                type:type
+            }
+        })
+    }
+
     handleCancel=(values)=>{
         const modalRef = Modal.confirm({
             title: '友情提醒',
@@ -168,7 +205,7 @@ class TestProject extends Component {
         });
     }
     render() {
-        const {visible,modalConfig,tableKey} = this.state;
+        const {visible,PersonExtractVisible,ExamRoomVisible,modalConfig,PersonExtractModalConfig,ExamRoomModalConfig,tableKey} = this.state;
         const dataSource = [{
             id: '1',
             mainName: '胡彦斌',
@@ -214,7 +251,24 @@ class TestProject extends Component {
                     ),
                 }}
             >
-                <PopModal refreshTable={this.refreshTable} visible={visible} modalConfig={modalConfig} toggleModalVisible={this.toggleModalVisible} />
+                <PopModal 
+                    refreshTable={this.refreshTable} 
+                    visible={visible} 
+                    modalConfig={modalConfig} 
+                    toggleModalVisible={this.toggleModalVisible} 
+                />
+                <PersonExtractPopModal 
+                    refreshTable={this.refreshTable} 
+                    visible={PersonExtractVisible} 
+                    modalConfig={PersonExtractModalConfig} 
+                    toggleModalVisible={this.togglePersonExtractModalVisible} 
+                />
+                <ExamRoomPopModal 
+                    refreshTable={this.refreshTable} 
+                    visible={ExamRoomVisible} 
+                    modalConfig={ExamRoomModalConfig} 
+                    toggleModalVisible={this.toggleExamRoomModalVisible} 
+                />
             </SearchTable>
         )
     }

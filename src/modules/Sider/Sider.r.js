@@ -38,7 +38,7 @@ class VTaxSider extends Component {
             return [];
         }
         return menusData.map((item) => {
-            if (!item.name  || item.path === '/web') {
+            if (!item.name || !item.icon || item.path === '/web') {
                 return null;
             }
 

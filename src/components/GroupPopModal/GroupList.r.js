@@ -5,11 +5,8 @@
  * description  :TODO: 可以按需引入的模块列表见 https://github.com/ecomfe/echarts/blob/master/index.js
  */
 import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
-import { Card, Avatar, List, Modal, Icon } from 'antd'; //Spin, Alert
+import { Card, List, Modal, Icon } from 'antd'; //Spin, Alert
 import './GroupList.less'
-
-const { Meta } = Card;
 
 class GroupList extends Component {
 
@@ -127,20 +124,12 @@ class GroupList extends Component {
                                     {
                                         isShow && <Icon type="close-circle" className="close" onClick={()=>this.handleDelete(item.id)} /> 
                                     }
-                                    
-                                    <Link to={'###'}>
-                                        <Card className="nav-card">
-                                            <Meta
-                                                avatar={<Avatar className="IconImg" src={item.icon.url}
-                                                            /* style={{
-                                                        background:item.icon.backgroundColor
-                                                    }}*/
-                                                />}
-                                                //title={item.name}
-                                                description={<span style={{color:'#666'}}>{item.name}</span>}
-                                            />
-                                        </Card>
-                                    </Link>
+                                    <Card className="nav-card">
+                                        <p>姓名：xxxxxx</p>
+                                        <p>性别：男</p>
+                                        <p>部门：xxxxxx</p>
+                                        <p>部门名称：xxxxxx</p>
+                                    </Card>
                                 </List.Item>
                             )}
                         />

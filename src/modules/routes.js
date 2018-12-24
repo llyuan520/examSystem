@@ -9,6 +9,7 @@ import Exam from './Exam';
 import Task from './Task';
 import SignUp from './SignUp';
 import TestProject from './TestProject';
+import ExamDetails from './TestProject/ExamDetails';
 
 const PATH = '/web';
 const routes = [
@@ -41,6 +42,11 @@ const routes = [
         component:wrapPage('考试项目管理', TestProject),
         name:'考试项目管理',
         icon:'radar-chart',
+        exact:true,
+    },{
+        path:`${PATH}/testProject/:id`,
+        component:wrapPage('考试详情', ExamDetails),
+        name:'考试详情',
         exact:true,
     },{
         path:'/',

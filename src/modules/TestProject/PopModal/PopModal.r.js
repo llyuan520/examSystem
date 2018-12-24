@@ -2,7 +2,7 @@
  * Created by liuliyuan on 2018/12/16.
  */
 import React,{Component} from 'react';
-import {Button,Modal,Form,Row,Col,Spin,message,Card} from 'antd';
+import {Button,Modal,Form,Row,Col,Spin,message} from 'antd';
 import {request,getFields} from 'utils'
 import {AutoFileUpload,AsyncTable} from 'components'
 import { NumericInputCell } from 'components/EditableCell'

@@ -47,7 +47,6 @@ class AutoFileUpload extends Component{
     render(){
         let {loading} = this.state;
         const props = this.props;
-        console.log(props)
         return(
             <Upload {...this.getUpLoadProps(props)} onChange={this.onChange.bind(this)}>
                     <Button disabled={props.disabled} loading={loading}>

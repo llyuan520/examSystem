@@ -22,10 +22,6 @@
     return arr;
 }*/
 
-
-
-
-
 export default function composeMenus(nodeList) {
     const arr = [];
     nodeList.forEach((item) => {
