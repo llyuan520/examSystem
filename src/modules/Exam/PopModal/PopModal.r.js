@@ -132,7 +132,7 @@ class PopModal extends Component{
     }
 
     updateRecord = data =>{
-        request.put('/tax/preferences/update',data)
+        request.put('/examinfo',data)
             .then(({data})=>{
                 this.toggleLoaded(true)
                 if(data.code===200){
@@ -151,7 +151,7 @@ class PopModal extends Component{
     }
 
     createRecord = data =>{
-        request.post('/tax/preferences/add',data)
+        request.post('/examinfo',data)
             .then(({data})=>{
                 this.toggleLoaded(true)
                 if(data.code===200){

@@ -192,7 +192,7 @@ class Exam extends Component {
             }
         })
     }
-    handleDelete=(values)=>{
+    handleDelete=(id)=>{
         const modalRef = Modal.confirm({
             title: '友情提醒',
             content: '该数据删除后将不可恢复，是否删除？',
@@ -201,7 +201,7 @@ class Exam extends Component {
             cancelText: '取消',
             onOk:()=>{
                 modalRef && modalRef.destroy();
-                request.delete(`${this.props.url}?${parseJsonToParams(values)}` )
+                request.delete(`/examinfo/${id}` )
                     .then(({data})=>{
                         this.toggleLoading(false)
                         if(data.code===200){
