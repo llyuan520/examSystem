@@ -109,6 +109,30 @@ class SignUp extends Component {
         tableKey:Date.now(),
     }
     
+    componentDidMount() {
+        //this.fetchExamapplylist()
+    }
+
+    fetchExamapplylist = () => {
+        request.get(`/examapply/page`)
+            .then(({data}) => {
+                console.log(data)
+                // if(data.code===0){
+                //     let resData = data.data
+                //     console.log(resData)
+                //     this.setState({
+                //         permissions:resData.permissions, //用户权限信息
+                //         roles:resData.roles, //用户角色信息
+                //         sysUser:resData.sysUser, //用户信息
+                //     })
+                // }
+            })
+            .catch(err => {
+                console.log(err)
+                message.error(err.message)
+            })
+    }
+
     refreshTable = ()=>{
         this.setState({
             tableKey:Date.now()
@@ -178,7 +202,7 @@ class SignUp extends Component {
                     pageSize:100,
                     columns:columns(this),
                     dataSource,
-                    url:'/output/invoice/marry/unwanted/list',
+                    url:'/examapply/page',
                     cardProps:{
                         title:'监考报名',
                     },

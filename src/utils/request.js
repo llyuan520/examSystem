@@ -9,7 +9,7 @@
  */
 import Axios from 'axios';
 import {message} from 'antd'
-import isTokenExpired from '../utils/tokenAnalysis';
+//import isTokenExpired from '../utils/tokenAnalysis';
 import { store } from '../redux/store';
 import {logout} from '../redux/ducks/user'
 
@@ -31,57 +31,48 @@ request.testSuccess = (data,success,fail) => {
 };
 // http request 拦截器
 request.interceptors.request.use(function (config) {
-
+    // config.headers={
+    //     Authorization:'Basic dGVzdDp0ZXN0',
+    // }
+    
     // 在发送请求之前做些什么
     if(request.getToken()){
-        // 检查看token是否已经过期
-        let token = request.getToken();
-        let expired = isTokenExpired(token);
-        if (expired) {
-            config.headers={
-                'Authorization': 'Bearer cGlnOnBpZw==',
-                // 'Accept': 'application/json',
-                // 'Content-Type': 'application/json; charset=utf-8',
-                // "Access-Control-Allow-Origin": "*"
-                //Authorization:request.getToken(),
-                //'X-Requested-With': 'XMLHttpRequest'
-            }
-            if(config.method==='get'){
-                let obj = config.params;
-                let temp = {};
-                if(config.params){
-                    for(let i in obj) {
-                        if((obj[i] + "").replace(/\s+/g,"") !== "" || obj[i] === null){
-                            temp[i] = obj[i];
-                        }
-                    }
-                    config.params = {
-                        randomStr: Date.parse(new Date())/1000,
-                        ...temp
+   
+        config.headers={
+            Authorization:`Bearer ${request.getToken()}` ,
+            'X-Requested-With': 'XMLHttpRequest'
+        }
+        if(config.method==='get'){
+            let obj = config.params;
+            let temp = {};
+            if(config.params){
+                for(let i in obj) {
+                    if((obj[i] + "").replace(/\s+/g,"") !== "" || obj[i] === null){
+                        temp[i] = obj[i];
                     }
                 }
-
                 config.params = {
-                    ...config.params,
-                    randomStr: Date.parse(new Date())/1000,
-                }
-
-            }else if(config.method==='delete'){
-                config.params = {
-                    randomStr: Date.parse(new Date())/1000,
-                    ...config.params
+                    _t: Date.parse(new Date())/1000,
+                    ...temp
                 }
             }
+
+            config.params = {
+                ...config.params,
+                _t: Date.parse(new Date())/1000,
+            }
+
+        }else if(config.method==='delete'){
+            config.params = {
+                _t: Date.parse(new Date())/1000,
+                ...config.params
+            }
+        }
 
             /*config.params = {
              ...config.params,
-             randomStr: Date.parse(new Date())/1000,
+             _t: Date.parse(new Date())/1000,
              }*/
-        }else{
-            // 如果token已经过期，则要更新token 或者跳转到登录页
-            store.dispatch && logout(store.dispatch)()
-            //message.error('登录超时,请重新登录')
-        }
 
     }
     return config;
