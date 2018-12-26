@@ -83,12 +83,12 @@ class AddGroupPopModal extends Component{
                                     getFields(form,[
                                         {
                                             label:'组名',
-                                            fieldName:'commodityName',
+                                            fieldName:'groupName',
                                             type:'input',
                                             span:24,
                                             formItemStyle,
                                             fieldDecoratorOptions:{
-                                                //initialValue: initData && initData['commodityName'],
+                                                //initialValue: initData && initData['groupName'],
                                                 rules:[
                                                     {
                                                         required:true,
