@@ -11,11 +11,12 @@ import Axios from 'axios';
 import {message} from 'antd'
 //import isTokenExpired from '../utils/tokenAnalysis';
 import { store } from '../redux/store';
-import {logout} from '../redux/ducks/user'
+import { logout } from '../redux/ducks/user'
 
 const request = Axios.create({
-    baseURL:window.baseURL+'examination/',
+    baseURL:window.baseURL,
     timeout:30000,
+    cache: 'no-cache',
 });
 request.getToken = ()=>{
     return store.getState().user.get('token') || false

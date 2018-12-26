@@ -1,10 +1,7 @@
 import React, { Component } from 'react'
-import { Card, Tree, Input, Row, message } from 'antd';
-import {connect} from 'react-redux'
+import { Card, Tree, Input, Row } from 'antd';
 import _ from 'lodash';
 import debounce from 'lodash/debounce'
-import {request} from 'utils'
-
 import './notSeletList.less'
 
 const { TreeNode } = Tree;
@@ -17,7 +14,7 @@ const getFilterKeys = (searchValue,treeData) => {
     do{
       let next = [];
       current.forEach(element => {
-        if(element.name.indexOf(searchValue)>-1){
+        if(element.nickname.indexOf(searchValue)>-1){
           keys.add(element.parentId)
         }
   
@@ -42,7 +39,7 @@ class NotSelectList extends Component{
 
     state={
         loading:false,
-
+        updateKey:Date.now(),
         checkedKeys:[],
         expandedKeys: [],
         searchValue: '',
@@ -51,28 +48,6 @@ class NotSelectList extends Component{
         nCheckeData: []
     }
     
-    componentDidMount(){
-        const { deptId } = this.props
-        
-        deptId && this.getfindDeptUsers(deptId)
-    }
-
-    getfindDeptUsers=(deptId)=>{
-        request.get(`/admin/user/findDeptUsers/${deptId}`)
-            .then(({data}) => {
-                console.log(data)
-                debugger
-                this.toggleLoading(false)
-                this.setState({
-                    nCheckeData:data
-                })
-            })
-            .catch(err => {
-                this.toggleLoading(false)
-                message.error(err.msg)
-            })
-    }
-
     toggleLoading = loading => this.setState({loading})
 
     // onCheck=(checkedKeys,e)=>{
@@ -128,19 +103,22 @@ class NotSelectList extends Component{
     }
 
     renderTreeNodes = data => data.map((item) => {
+        console.log(item)
+        debugger
         if (item.children && item.children.length>0) {
             return (
-                <TreeNode title={item.name} key={item.id} dataRef={item}>
+                <TreeNode title={item.nickname} key={item.userId} dataRef={item}>
                 {this.renderTreeNodes(item.children)}
                 </TreeNode>
             );
         }
-        return <TreeNode title={item.name} key={item.id} {...item} dataRef={item} />;
+        return <TreeNode title={item.nickname} key={item.userId} {...item} dataRef={item} />;
     })
 
     render(){
         const {treeData,treeWrapperStyle} = this.props;
         const {loading, expandedKeys,checkedKeys,searchValue,autoExpandParent} = this.state;
+        console.log(treeData, treeData && treeData.children.length>0)
         return (
             
             <Card 
@@ -161,7 +139,7 @@ class NotSelectList extends Component{
             > 
                 <div style={treeWrapperStyle}>
                     {
-                        treeData && treeData.length>0 && (
+                        treeData && treeData.children.length>0 && (
                             <Tree 
                                 //selectable={false}
                                 checkedKeys={checkedKeys}
@@ -210,6 +188,4 @@ class NotSelectList extends Component{
         //     :'loading'
     }
 }
-export default connect(state=>({
-    deptId:state.user.getIn(['personal','userInfo','sysUser','deptId']),
-}))(NotSelectList)
+export default NotSelectList

@@ -1,35 +1,72 @@
-import React,{Component} from 'react'
-import { Modal,Row,Col,Button,Icon,Form } from 'antd';
+import React, { Component } from 'react'
+import { Modal, Row, Col, Button, Icon, Form, message, Tag } from 'antd';
+import { compose } from 'redux';
+import { connect } from 'react-redux'
 import { NotSelectList, SelectList } from '../SelectPersonnelPopModal'
+import { request } from 'utils'
 
-let list = (len) =>{
-    const children = [];
-    for (let i = 0; i < len; i++) {
-        children.push({ 
-            "id" : `id${i+1}`,
-            "name" : `天津区域${i+1}`,
-            "code" : `BQ${i+1}`,
-            "parentId" : "1",
-            "isLeaf" : true,
-         });
-    }
-    return children
-}
-
-const treeData = [ {
-    "id" : "1",
-    "name" : "碧桂园集团",
-    "code" : "ALL",
-    "parentId" : "0",
-    "isLeaf" : false,
-    "children" : list(50)
-}] 
 class AddPeoplePopModal extends Component{
 
     state={
         visible:false,
         loading:false,
-        checkeData:[]
+        updateKey:Date.now(),
+        treeData:[],
+        checkeData:[],
+        isShow:false,
+    }
+
+    componentDidMount(){
+        this.getTreeParentNode()
+    }
+
+    getTreeParentNode = ()=>{
+        const { deptId } = this.props
+        request.get(`/admin/dept/tree`)
+            .then(({data}) => {
+                //if(data.code===0){
+                    this.toggleLoading(false)
+                    this.setState({
+                        treeData:data[0]
+                    },()=>{
+                        deptId && this.getfindDeptUsers(deptId)
+                    })
+                // }else{
+                //     message.error(`删除失败:${data.msg}`)
+                // }
+                
+            })
+            .catch(err => {
+                this.toggleLoading(false)
+                message.error(err.msg)
+            })
+    }
+
+    getfindDeptUsers=(deptId)=>{
+        request.get(`/admin/user/findDeptUsers/${deptId}`)
+            .then(({data}) => {
+                if(data.code===0){
+                    this.toggleLoading(false)
+                    this.setState({
+                        treeData:{
+                            ...this.state.treeData,
+                            children:data.data
+                        }
+                    },()=>{
+                        this.setState({
+                            isShow:true,
+                            updateKey:Date.now(),
+                        })
+                    })
+                }else{
+                    message.error(`删除失败:${data.msg}`)
+                }
+                
+            })
+            .catch(err => {
+                this.toggleLoading(false)
+                message.error(err.msg)
+            })
     }
     
     toggleLoading = loading => this.setState({loading})
@@ -45,6 +82,13 @@ class AddPeoplePopModal extends Component{
         })
     }
 
+    handleDelete = (userId) =>{
+        const tags = this.state.checkeData.filter(item => item.userId !== userId);
+        this.setState({ 
+            checkeData:tags
+        });
+    }
+
     handleSubmit = e => {
         e && e.preventDefault();
         this.props.form.validateFields((err, values) => {
@@ -57,7 +101,7 @@ class AddPeoplePopModal extends Component{
     }
 
     render(){
-        const { visible, loading, checkeData} = this.state;
+        const { visible, loading, updateKey, isShow, treeData, checkeData} = this.state;
         const { style, form, buttonOptions, modalOptions } =this.props;
         const treeWrapperStyle = {
             height   : 400,//window.screen.availHeight-350,
@@ -77,6 +121,12 @@ class AddPeoplePopModal extends Component{
                     {buttonOptions.icon && <Icon type={buttonOptions.icon} />}
                     {buttonOptions.text}
                 </Button>
+
+                <div className="tags">
+                    {checkeData.map(item => (
+                        <Tag closable key={item.userId} afterClose={() => this.handleDelete(item.userId)}>{item.nickname}</Tag>
+                    ))}
+                </div>
             
                 <Modal
                     {...modalOptions}
@@ -89,22 +139,38 @@ class AddPeoplePopModal extends Component{
                     onOk={this.handleSubmit}
                     onCancel={() => {
                         form.resetFields();
+                        this.setState({
+                            treeData:[]
+                        })
                         this.toggleVisible(false)
                     }}
                 >
                     <Form style={{height:'100%'}}>
-                        <Row gutter={24}>
-                            <Col lg={12} md={24}>
-                                <NotSelectList treeData={treeData} checkeData={checkeData} setCheckeData={this.setCheckeData.bind(this)} treeWrapperStyle={treeWrapperStyle} />
-                            </Col>
-                            <Col lg={12} md={24}>
-                                <SelectList sum={ treeData[0].children.length } checkeData={checkeData} setCheckeData={this.setCheckeData.bind(this)} treeWrapperStyle={treeWrapperStyle} />
-                            </Col>
-                        </Row>
+                        {
+                            isShow && treeData && treeData.children.length>0 && (
+                                <Row gutter={24}>
+                                    <Col lg={12} md={24}>
+                                        <NotSelectList key={updateKey} treeData={treeData} checkeData={checkeData} setCheckeData={this.setCheckeData.bind(this)} treeWrapperStyle={treeWrapperStyle} />
+                                    </Col>
+                                    <Col lg={12} md={24}>
+                                        <SelectList key={updateKey} sum={ treeData.children && treeData.children.length } checkeData={checkeData} setCheckeData={this.setCheckeData.bind(this)} treeWrapperStyle={treeWrapperStyle} />
+                                    </Col>
+                                </Row>
+                            )
+                        }
                     </Form>
                 </Modal>
             </span>
         )
     }
 }
-export default Form.create()(AddPeoplePopModal)
+
+const enhance = compose(
+    connect(state=>({
+        deptId:state.user.getIn(['personal','userInfo','sysUser','deptId']),
+    }),dispatch=>({
+        //login:login(dispatch)
+    })),
+    Form.create()
+)
+export default enhance(AddPeoplePopModal);

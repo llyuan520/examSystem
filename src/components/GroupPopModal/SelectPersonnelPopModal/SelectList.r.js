@@ -16,9 +16,9 @@ class SelectList extends Component{
     onSelect = (selectedKeys, info) => {
         const { checkeData } = this.props
         const newCheckeData = _.cloneDeep(checkeData)
-        const id = info.node.props.dataRef.id;
+        const userId = info.node.props.dataRef.userId;
         let newArry =  _.remove(newCheckeData,(o)=>{
-            return o.id !== id
+            return o.userId !== userId
         })
         this.props.setCheckeData(newArry)
     }
@@ -26,12 +26,12 @@ class SelectList extends Component{
     renderTreeNodes = data => data.map((item) => {
         if (item.children && item.children.length>0) {
           return (
-            <TreeNode title={item.title} key={item.key} dataRef={item}>
+            <TreeNode title={item.nickname} key={item.userId} dataRef={item}>
               {this.renderTreeNodes(item.children)}
             </TreeNode>
           );
         }
-        return <TreeNode title={item.name} key={item.id} {...item} dataRef={item} />;
+        return <TreeNode title={item.nickname} key={item.userId} {...item} dataRef={item} />;
     })
 
     render(){

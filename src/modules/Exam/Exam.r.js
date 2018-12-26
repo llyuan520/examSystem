@@ -180,7 +180,7 @@ class Exam extends Component {
             cancelText: '取消',
             onOk:()=>{
                 modalRef && modalRef.destroy();
-                request.delete(`/examinfo/${id}` )
+                request.delete(`/examination/examinfo/${id}` )
                     .then(({data})=>{
                         if(data.code===0){
                             message.success('删除成功！');
@@ -209,7 +209,7 @@ class Exam extends Component {
                     rowKey:'examId',
                     pageSize:10,
                     columns:columns(this),
-                    url:'/examinfo/page',
+                    url:'/examination/examinfo/page',
                     cardProps:{
                         title:'考试信息管理',
                     },

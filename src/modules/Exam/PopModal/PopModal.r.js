@@ -30,7 +30,7 @@ class PopModal extends Component{
 
     fetchExaminfoById = (id)=>{
         this.toggleLoaded(false)
-        request.get(`/examinfo/${id}`)
+        request.get(`/examination/examinfo/${id}`)
             .then(({data})=>{
                 this.toggleLoaded(true)
                 if(data.code===0){
@@ -113,7 +113,7 @@ class PopModal extends Component{
     }
 
     updateRecord = data =>{
-        request.put('/examinfo',data)
+        request.put('/examination/examinfo',data)
             .then(({data})=>{
                 this.toggleLoaded(true)
                 if(data.code===0){
@@ -132,7 +132,7 @@ class PopModal extends Component{
     }
 
     createRecord = data =>{
-        request.post('/examinfo',data)
+        request.post('/examination/examinfo',data)
             .then(({data})=>{
                 this.toggleLoaded(true)
                 if(data.code===0){
