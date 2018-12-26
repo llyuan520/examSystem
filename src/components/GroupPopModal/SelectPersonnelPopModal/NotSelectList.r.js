@@ -1,7 +1,10 @@
 import React, { Component } from 'react'
-import { Card, Tree, Input, Row } from 'antd';
+import { Card, Tree, Input, Row, message } from 'antd';
+import {connect} from 'react-redux'
 import _ from 'lodash';
 import debounce from 'lodash/debounce'
+import {request} from 'utils'
+
 import './notSeletList.less'
 
 const { TreeNode } = Tree;
@@ -48,6 +51,28 @@ class NotSelectList extends Component{
         nCheckeData: []
     }
     
+    componentDidMount(){
+        const { deptId } = this.props
+        
+        deptId && this.getfindDeptUsers(deptId)
+    }
+
+    getfindDeptUsers=(deptId)=>{
+        request.get(`/admin/user/findDeptUsers/${deptId}`)
+            .then(({data}) => {
+                console.log(data)
+                debugger
+                this.toggleLoading(false)
+                this.setState({
+                    nCheckeData:data
+                })
+            })
+            .catch(err => {
+                this.toggleLoading(false)
+                message.error(err.msg)
+            })
+    }
+
     toggleLoading = loading => this.setState({loading})
 
     // onCheck=(checkedKeys,e)=>{
@@ -185,4 +210,6 @@ class NotSelectList extends Component{
         //     :'loading'
     }
 }
-export default NotSelectList
+export default connect(state=>({
+    deptId:state.user.getIn(['personal','userInfo','sysUser','deptId']),
+}))(NotSelectList)

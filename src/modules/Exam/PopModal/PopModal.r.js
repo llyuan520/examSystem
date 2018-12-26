@@ -5,12 +5,7 @@ import React,{Component} from 'react';
 import {Button,Modal,Form,Row,Col,Spin,message} from 'antd';
 import {request,getFields} from 'utils'
 import moment from 'moment'
-const apiList = [
-    {text:'待处理',value:'10'},
-    {text:'处理中',value:'20'},
-    {text:'处理成功',value:'30'},
-    {text:'异常',value:'40'},
-];
+
 const formItemStyle = {
     labelCol:{
         span:7
@@ -23,7 +18,7 @@ const dateFormat = 'YYYY-MM-DD';
 const dateTimeFormat = "YYYY-MM-DD HH:mm";
 class PopModal extends Component{
     static defaultProps={
-        type:'edit',
+        type:'modify',
         visible:true
     }
     state={
@@ -32,22 +27,24 @@ class PopModal extends Component{
     }
 
     toggleLoaded = loaded => this.setState({loaded})
-    // fetchReportById = (id)=>{
-    //     this.toggleLoaded(false)
-    //     request.get(`/tax/preferences/find/${id}`)
-    //         .then(({data})=>{
-    //             this.toggleLoaded(true)
-    //             if(data.code===200){
-    //                 this.setState({
-    //                     initData:data.data
-    //                 })
-    //             }
-    //         })
-    //         .catch(err => {
-    //             this.toggleLoaded(true)
-    //             message.error(err.message)
-    //         });
-    //}
+
+    fetchExaminfoById = (id)=>{
+        this.toggleLoaded(false)
+        request.get(`/examinfo/${id}`)
+            .then(({data})=>{
+                this.toggleLoaded(true)
+                if(data.code===0){
+                    this.setState({
+                        initData:data.data
+                    })
+                }
+            })
+            .catch(err => {
+                this.toggleLoaded(true)
+                message.error(err.message)
+            });
+    }
+
     componentWillReceiveProps(nextProps){
         if(!nextProps.visible){
             /**
@@ -64,16 +61,11 @@ class PopModal extends Component{
             })
         }
         if(this.props.visible !== nextProps.visible && !this.props.visible && nextProps.modalConfig.type !== 'add'){
+
             /**
              * 弹出的时候如果类型不为新增，则异步请求数据
              * */
-            //this.fetchReportById(nextProps.modalConfig.id,nextProps)
-            this.toggleLoaded(false)
-            this.setState({
-                initData:nextProps.modalConfig.record
-            },()=>{
-                this.toggleLoaded(true)
-            })
+            this.fetchExaminfoById(nextProps.modalConfig.id)
         }
     }
 
@@ -91,40 +83,29 @@ class PopModal extends Component{
                 this.toggleLoaded(false)
 
                 for(let key in values){
-                    if(key === 'deliveryDate'){
+                    if(key === 'registration'){
                         if(Array.isArray( values[key] ) && values[key].length === 2 && moment.isMoment(values[key][0])){
                             //当元素为数组&&长度为2&&是moment对象,那么可以断定其是一个rangePicker
-                            values[`${key}Start`] = values[key][0].format(dateTimeFormat);
-                            values[`${key}End`] = values[key][1].format(dateTimeFormat);
+                            values[`${key}BeginDate`] = values[key][0].format(dateTimeFormat);
+                            values[`${key}EndDate`] = values[key][1].format(dateTimeFormat);
                             delete values[key]
                         }
                     }
-                    if(key === 'documentNum'){
+                    if(key === 'exam'){
                         if(Array.isArray( values[key] ) && values[key].length === 2 && moment.isMoment(values[key][0])){
                             //当元素为数组&&长度为2&&是moment对象,那么可以断定其是一个rangePicker
-                            values[`${key}Start`] = values[key][0].format(dateFormat);
-                            values[`${key}End`] = values[key][1].format(dateFormat);
+                            values[`${key}BeginDate`] = values[key][0].format(dateFormat);
+                            values[`${key}EndDate`] = values[key][1].format(dateFormat);
                             delete values[key] 
                         }
                     }
-                    if(moment.isMoment(values[key])){
-                        //格式化一下时间 YYYY-MM类型
-                        if(moment(values[key].format('YYYY-MM'),'YYYY-MM',true).isValid()){
-                            values[key] = values[key].format('YYYY-MM');
-                        }
-
-                        /*if(moment(values[key].format('YYYY-MM-DD'),'YYYY-MM-DD',true).isValid()){
-                         values[key] = values[key].format('YYYY-MM-DD');
-                         }*/
-                    }
                 }
-                console.log(values)
                 
-                if(type==='edit'){
-                    values.id=this.state.initData['id'];
-                    //this.updateRecord(values)
+                if(type==='modify'){
+                    values.examId=this.state.initData['examId'];
+                    this.updateRecord(values)
                 }else if(type==='add'){
-                    //this.createRecord(values)
+                    this.createRecord(values)
                 }
             }
         });
@@ -135,7 +116,7 @@ class PopModal extends Component{
         request.put('/examinfo',data)
             .then(({data})=>{
                 this.toggleLoaded(true)
-                if(data.code===200){
+                if(data.code===0){
                     const props = this.props;
                     message.success('更新成功!');
                     props.toggleModalVisible(false);
@@ -154,7 +135,7 @@ class PopModal extends Component{
         request.post('/examinfo',data)
             .then(({data})=>{
                 this.toggleLoaded(true)
-                if(data.code===200){
+                if(data.code===0){
                     const props = this.props;
                     message.success('新增成功!');
                     props.toggleModalVisible(false);
@@ -218,7 +199,7 @@ class PopModal extends Component{
                                 getFields(props.form,[
                                     {
                                         label:'考试名称',
-                                        fieldName:'commodityName',
+                                        fieldName:'examName',
                                         type:'input',
                                         span:24,
                                         formItemStyle,
@@ -226,7 +207,7 @@ class PopModal extends Component{
                                             disabled
                                         },
                                         fieldDecoratorOptions:{
-                                            initialValue: initData && initData['commodityName'],
+                                            initialValue: initData && initData['examName'],
                                             rules:[
                                                 {
                                                     required:true,
@@ -236,28 +217,8 @@ class PopModal extends Component{
                                         },
                                     },
                                     {
-                                        label:'考试类型',
-                                        fieldName:'purchaseTaxNum',
-                                        type:'select',
-                                        span:24,
-                                        formItemStyle,
-                                        componentProps:{
-                                            disabled
-                                        },
-                                        fieldDecoratorOptions:{
-                                            initialValue:initData && initData['purchaseTaxNum'] ,
-                                            rules:[
-                                                {
-                                                    required:true,
-                                                    message:'请选择考试类型'
-                                                }
-                                            ]
-                                        },
-                                        options:apiList
-                                    },
-                                    {
                                         label:'报名时间',
-                                        fieldName:'deliveryDate',
+                                        fieldName:'registration',
                                         type:'rangePicker',
                                         span:24,
                                         formItemStyle,
@@ -269,7 +230,7 @@ class PopModal extends Component{
                                             format:dateTimeFormat
                                         },
                                         fieldDecoratorOptions:{
-                                            initialValue:(initData && [moment(initData['invoiceCodeStart'], dateTimeFormat), moment(initData['invoiceCodeEnd'], dateTimeFormat)]) || undefined,
+                                            initialValue:(initData && [moment(initData['registrationBeginTime'], dateTimeFormat), moment(initData['registrationEndTime'], dateTimeFormat)]) || undefined,
                                             rules:[
                                                 {
                                                     required:true,
@@ -280,7 +241,7 @@ class PopModal extends Component{
                                     },
                                     {
                                         label:'考试时间',
-                                        fieldName:'documentNum',
+                                        fieldName:'exam',
                                         type:'rangePicker',
                                         span:24,
                                         formItemStyle,
@@ -288,7 +249,7 @@ class PopModal extends Component{
                                             disabled
                                         },
                                         fieldDecoratorOptions:{
-                                            initialValue:(initData && [moment(initData['invoiceCodeStart'], dateFormat), moment(initData['invoiceCodeEnd'], dateFormat)]) || undefined,
+                                            initialValue:(initData && [moment(initData['examBeginDate'], dateFormat), moment(initData['examEndDate'], dateFormat)]) || undefined,
                                             rules:[
                                                 {
                                                     required:true,

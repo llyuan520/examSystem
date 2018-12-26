@@ -70,8 +70,8 @@ class SearchTable extends Component{
                     }
                     if(Array.isArray( values[key] ) && values[key].length === 2 && moment.isMoment(values[key][0])){
                         //当元素为数组&&长度为2&&是moment对象,那么可以断定其是一个rangePicker
-                        values[`${key}Start`] = values[key][0].format('YYYY-MM-DD');
-                        values[`${key}End`] = values[key][1].format('YYYY-MM-DD');
+                        values[`${key}BeginDate`] = values[key][0].format('YYYY-MM-DD');
+                        values[`${key}EndDate`] = values[key][1].format('YYYY-MM-DD');
                         values[key] = undefined;
                     }
 
@@ -80,22 +80,22 @@ class SearchTable extends Component{
                      * 会与上一次的filter合并，这一次的rangePicker值为空的时候就会导致合并后留下上次选择过的值，导致条件出错
                      * */
                     if(Array.isArray( values[key] ) && values[key].length === 0){
-                        values[`${key}Start`] = undefined;
-                        values[`${key}End`] = undefined;
+                        values[`${key}BeginDate`] = undefined;
+                        values[`${key}EndDate`] = undefined;
                     }
 
-                    if(moment.isMoment(values[key])){
-                        if(key === 'taxMonth' || key === 'authMonth' || key === 'partTerm' || key === 'deductedPeriod'){
-                            //格式化一下时间 YYYY-MM类型
-                            if(moment(values[key].format('YYYY-MM'),'YYYY-MM',true).isValid()){
-                                values[key] = values[key].format('YYYY-MM');
-                            }
-                        }else{
-                            if(moment(values[key].format('YYYY-MM-DD'),'YYYY-MM-DD',true).isValid()){
-                                values[key] = values[key].format('YYYY-MM-DD');
-                            }
-                        }
-                    }
+                    // if(moment.isMoment(values[key])){
+                    //     if(key === 'taxMonth' || key === 'authMonth' || key === 'partTerm' || key === 'deductedPeriod'){
+                    //         //格式化一下时间 YYYY-MM类型
+                    //         if(moment(values[key].format('YYYY-MM'),'YYYY-MM',true).isValid()){
+                    //             values[key] = values[key].format('YYYY-MM');
+                    //         }
+                    //     }else{
+                    //         if(moment(values[key].format('YYYY-MM-DD'),'YYYY-MM-DD',true).isValid()){
+                    //             values[key] = values[key].format('YYYY-MM-DD');
+                    //         }
+                    //     }
+                    // }
                 }
 
                 this.mounted && this.setState(prevState=>({

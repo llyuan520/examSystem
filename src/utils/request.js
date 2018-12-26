@@ -52,19 +52,19 @@ request.interceptors.request.use(function (config) {
                     }
                 }
                 config.params = {
-                    _t: Date.parse(new Date())/1000,
+                    //_t: Date.parse(new Date())/1000,
                     ...temp
                 }
             }
 
             config.params = {
                 ...config.params,
-                _t: Date.parse(new Date())/1000,
+                //_t: Date.parse(new Date())/1000,
             }
 
         }else if(config.method==='delete'){
             config.params = {
-                _t: Date.parse(new Date())/1000,
+                //_t: Date.parse(new Date())/1000,
                 ...config.params
             }
         }

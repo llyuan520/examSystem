@@ -19,38 +19,29 @@ const formItemStyle={
         span:17
     }
 }
-const apiList = [
-    {text:'待处理',value:'10'},
-    {text:'处理中',value:'20'},
-    {text:'处理成功',value:'30'},
-    {text:'异常',value:'40'},
+const state = [
+    {text:'发布',value:'1'},
+    {text:'完结',value:'2'},
 ];
 const searchFields = [
     {
         label: '考试名称',
-        fieldName: 'commodityName',
-        formItemStyle,
-        span:8,
-        type: 'input',
-    },
-    {
-        label: '考试类型',
-        fieldName: 'purchaseTaxNum',
+        fieldName: 'examName',
         formItemStyle,
         span:8,
         type: 'input',
     },
     {
         label: '状态',
-        fieldName: 'subletBusiness',
+        fieldName: 'state',
         formItemStyle,
         span: 8,
         type: 'select',
-        options: apiList
+        options: state
     },
     {
         label:'时间起止',
-        fieldName:'deliveryDate',
+        fieldName:'exam',
         type:'rangePicker',
         span:8,
         formItemStyle,
@@ -59,36 +50,24 @@ const searchFields = [
 const columns = (context) => [
     {
         title:'考试名称',
-        dataIndex:'mainName',
+        dataIndex:'examName',
         //render:(text,record)=>(<span title='查看详情' style={pointerStyle} onClick={()=>context.showModal('view',record)}>{text}</span>),
     },
     {
-        title:'考试类型',
-        dataIndex:'purchaseTaxNum'
-    },
-    {
         title:'开始时间',
-        dataIndex:'invoiceCodeStart'
+        dataIndex:'examBeginDate'
     },
     {
         title:'结束时间',
-        dataIndex:'invoiceCodeEnd'
-    },
-    {
-        title:'人数',
-        dataIndex:'invoiceNum'
-    },
-    {
-        title:'已报名人数',
-        dataIndex:'commodityName',
+        dataIndex:'examEndDate'
     },
     {
         title:'状态',
-        dataIndex:'invoiceType',
+        dataIndex:'state',
         render(text, record){
-            apiList.map(o=>{
-                if(o.value === record.apiKey){
-                    text = o.label;
+            state.map(o=>{
+                if(o.value === record.state){
+                    text = o.text;
                 }
                 return null;
             });
@@ -109,7 +88,7 @@ const columns = (context) => [
                         context.setState({
                             modalConfig:{
                                 type:'modify',
-                                record,
+                                id:record.examId,
                             },
                         },()=>{
                             context.toggleModalVisible(true)
@@ -121,7 +100,7 @@ const columns = (context) => [
                 <Divider type="vertical" />
                 <span 
                     style={{ color:'#f5222d', cursor:'pointer'}}
-                    onClick={()=>context.handleDelete(record.id)}
+                    onClick={()=>context.handleDelete(record.examId)}
                 >
                     删除
                 </span>
@@ -203,19 +182,15 @@ class Exam extends Component {
                 modalRef && modalRef.destroy();
                 request.delete(`/examinfo/${id}` )
                     .then(({data})=>{
-                        this.toggleLoading(false)
-                        if(data.code===200){
-                            const {onSuccess} = this.props;
+                        if(data.code===0){
                             message.success('删除成功！');
-                            this.toggleVisible(false);
-                            onSuccess && onSuccess()
+                            this.refreshTable()
                         }else{
                             message.error(`删除失败:${data.msg}`)
                         }
                     }).catch(err=>{
-                    message.error(err.message)
-                    this.toggleLoading(false)
-                })
+                        message.error(err.message)
+                    })
             },
             onCancel() {
                 modalRef.destroy()
@@ -231,12 +206,10 @@ class Exam extends Component {
                 }}
                 tableOption={{
                     key:tableKey,
+                    rowKey:'examId',
                     pageSize:10,
                     columns:columns(this),
                     url:'/examinfo/page',
-                    scroll:{
-                        x:'150%'
-                    },
                     cardProps:{
                         title:'考试信息管理',
                     },

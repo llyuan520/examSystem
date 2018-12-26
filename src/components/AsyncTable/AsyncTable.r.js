@@ -1,10 +1,10 @@
 /**
  * Created by liurunbin on 2017/12/21.
  */
-import React,{Component} from 'react';
-import {Table} from 'antd' //message
+import React, { Component } from 'react';
+import { Table, message } from 'antd' //message
 import PropTypes from 'prop-types'
-import {request} from 'utils'
+import { request } from 'utils'
 import './styles.module.less'
 export default class AsyncTable extends Component{
     constructor(props){
@@ -61,20 +61,21 @@ export default class AsyncTable extends Component{
         const props = nextProps || this.props;
         this.setState({ loaded: false });
         const composeParams = {
-            size: this.state.pagination.pageSize,
+            limit: this.state.pagination.pageSize,
             ...params,
             ...props.filters
         };
         request.get(props.url,{
             params:composeParams
         }).then(({data}) => {
-            //if(data.code===200){
+            if(data.code===0){
                 const pagination = { ...this.state.pagination };
-                pagination.total = typeof data.total !== 'undefined' ? data.total : data.page.total;
-                pagination.pageSize = typeof data.size !== 'undefined' ? data.size : data.page.size;
+                pagination.total = typeof data.data.total !== 'undefined' ? data.data.total : data.data.page.total;
+                pagination.pageSize = typeof data.data.size !== 'undefined' ? data.data.size : data.data.page.size;
                 
-                let dataSource = data.records ? data.records : data.page.records;
-                let totalSource = {...data, page:undefined};
+                let dataSource = data.data.records ? data.data.records : data.data.page.records;
+                
+                let totalSource = {...data.data, page:undefined};
 
                 /** 给外部一个回调方法，可以得到每次变更后的data*/
                 props.tableProps.onDataChange && props.tableProps.onDataChange(dataSource)
@@ -103,17 +104,17 @@ export default class AsyncTable extends Component{
 
                 /**假如设置了单选或多选，重新异步请求数据的时候选中项也要清空，也要主动触发一下selectedRowKeys的onChange*/
                 props.tableProps.clearSelectedRowAfterFetch && props.tableProps.onRowSelect && props.tableProps.onRowSelect([],[])
-            // }else{
-            //     message.error(data.msg)
-            //     /** 给外部一个回调方法，可以得到每次变更后的data*/
-            //     props.tableProps.onDataChange && props.tableProps.onDataChange([])
-            //     props.tableProps.onTotalSource && props.tableProps.onTotalSource({})
+            }else{
+                message.error(data.msg)
+                /** 给外部一个回调方法，可以得到每次变更后的data*/
+                props.tableProps.onDataChange && props.tableProps.onDataChange([])
+                props.tableProps.onTotalSource && props.tableProps.onTotalSource({})
                   
-            //     this.mounted && this.setState({
-            //         loaded: true,
-            //         dataSource:[],
-            //     });
-            // }
+                this.mounted && this.setState({
+                    loaded: true,
+                    dataSource:[],
+                });
+            }
 
         }).catch(err=>{
             this.mounted && this.setState({
@@ -131,8 +132,8 @@ export default class AsyncTable extends Component{
         let sor = sorter.order ? sorter.order.replace('end', '') : undefined;
         console.log(sor)
         this.fetch({
-            size: pagination.pageSize,
-            current: pagination.current,
+            limit: pagination.pageSize,
+            page: pagination.current,
             orderByField: sorter.field,
             asc: sor ? sor === 'asc' : undefined,
             ...filters,
