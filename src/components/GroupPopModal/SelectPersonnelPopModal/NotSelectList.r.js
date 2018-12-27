@@ -103,8 +103,6 @@ class NotSelectList extends Component{
     }
 
     renderTreeNodes = data => data.map((item) => {
-        console.log(item)
-        debugger
         if (item.children && item.children.length>0) {
             return (
                 <TreeNode title={item.nickname} key={item.userId} dataRef={item}>
@@ -118,7 +116,7 @@ class NotSelectList extends Component{
     render(){
         const {treeData,treeWrapperStyle} = this.props;
         const {loading, expandedKeys,checkedKeys,searchValue,autoExpandParent} = this.state;
-        console.log(treeData, treeData && treeData.children.length>0)
+        console.log(treeData, treeData && treeData.length>0)
         return (
             
             <Card 
@@ -139,7 +137,7 @@ class NotSelectList extends Component{
             > 
                 <div style={treeWrapperStyle}>
                     {
-                        treeData && treeData.children.length>0 && (
+                        treeData && treeData.length>0 && (
                             <Tree 
                                 //selectable={false}
                                 checkedKeys={checkedKeys}

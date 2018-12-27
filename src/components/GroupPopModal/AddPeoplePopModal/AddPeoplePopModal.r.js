@@ -24,10 +24,16 @@ class AddPeoplePopModal extends Component{
         const { deptId } = this.props
         request.get(`/admin/dept/tree`)
             .then(({data}) => {
+                const result = [{
+                    children: data[0].children,
+                    parentId: data[0].parentId,
+                    nickname:data[0].name,
+                    userId:`d-${data[0].id}`,
+                }]
                 //if(data.code===0){
                     this.toggleLoading(false)
                     this.setState({
-                        treeData:data[0]
+                        treeData:result
                     },()=>{
                         deptId && this.getfindDeptUsers(deptId)
                     })
@@ -47,11 +53,13 @@ class AddPeoplePopModal extends Component{
             .then(({data}) => {
                 if(data.code===0){
                     this.toggleLoading(false)
+                    const result = [{
+                        ...this.state.treeData[0],
+                        children: data.data,
+                        
+                    }]
                     this.setState({
-                        treeData:{
-                            ...this.state.treeData,
-                            children:data.data
-                        }
+                        treeData:result
                     },()=>{
                         this.setState({
                             isShow:true,
@@ -147,13 +155,13 @@ class AddPeoplePopModal extends Component{
                 >
                     <Form style={{height:'100%'}}>
                         {
-                            isShow && treeData && treeData.children.length>0 && (
+                            isShow && treeData.length>0 && (
                                 <Row gutter={24}>
                                     <Col lg={12} md={24}>
                                         <NotSelectList key={updateKey} treeData={treeData} checkeData={checkeData} setCheckeData={this.setCheckeData.bind(this)} treeWrapperStyle={treeWrapperStyle} />
                                     </Col>
                                     <Col lg={12} md={24}>
-                                        <SelectList key={updateKey} sum={ treeData.children && treeData.children.length } checkeData={checkeData} setCheckeData={this.setCheckeData.bind(this)} treeWrapperStyle={treeWrapperStyle} />
+                                        <SelectList key={updateKey} sum={ treeData[0].children && treeData[0].children.length } checkeData={checkeData} setCheckeData={this.setCheckeData.bind(this)} treeWrapperStyle={treeWrapperStyle} />
                                     </Col>
                                 </Row>
                             )
